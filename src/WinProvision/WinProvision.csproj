@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>WinProvision</AssemblyName>
+    <Version>0.4.0</Version>
+    <ApplicationIcon>Assets\WinProvision.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup><None Update="Scripts\*.ps1" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
+  <ItemGroup><None Update="Scripts\Bundle-AppIcons.ps1" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" /></ItemGroup>
+  <ItemGroup><EmbeddedResource Include="Scripts\Provisioner.ps1" /></ItemGroup>
+  <ItemGroup><EmbeddedResource Include="Assets\AdditionalApps.json" /></ItemGroup>
+  <ItemGroup><Resource Include="Assets\Logo.png" /><Resource Include="Assets\WinProvision.ico" /></ItemGroup>
+</Project>

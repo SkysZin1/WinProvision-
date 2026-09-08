@@ -1,0 +1,13 @@
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="256" Height="256">
+ <Rectangle Width="256" Height="256" RadiusX="54" RadiusY="54" Fill="#122E33"/>
+ <Canvas>
+  <Canvas.RenderTransform><RotateTransform Angle="35" CenterX="128" CenterY="128"/></Canvas.RenderTransform>
+  <Rectangle Canvas.Left="94" Canvas.Top="35" Width="68" Height="65" RadiusX="8" RadiusY="8" Fill="#E5F6EF"/>
+  <Rectangle Canvas.Left="105" Canvas.Top="49" Width="14" Height="21" RadiusX="2" RadiusY="2" Fill="#122E33"/>
+  <Rectangle Canvas.Left="137" Canvas.Top="49" Width="14" Height="21" RadiusX="2" RadiusY="2" Fill="#122E33"/>
+  <Rectangle Canvas.Left="82" Canvas.Top="86" Width="92" Height="133" RadiusX="23" RadiusY="23" Fill="#38C4A3"/>
+  <Rectangle Canvas.Left="101" Canvas.Top="105" Width="54" Height="8" RadiusX="4" RadiusY="4" Fill="#A9F1D9"/>
+  <Ellipse Canvas.Left="118" Canvas.Top="183" Width="20" Height="20" Fill="#122E33"/>
+ </Canvas>
+ <Path Data="M 199,139 A 31,31 0 0 0 171,180 L 130,220 A 12,12 0 0 0 147,237 L 188,197 A 31,31 0 0 0 225,156 L 205,176 L 188,171 L 184,154 Z" Fill="#FFC66D" Stroke="#122E33" StrokeThickness="7" StrokeLineJoin="Round"/>
+</Canvas>
