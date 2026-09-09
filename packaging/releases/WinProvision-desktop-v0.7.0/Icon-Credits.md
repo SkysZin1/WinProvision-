@@ -8,5 +8,5 @@ Run `Scripts/Bundle-AppIcons.ps1` after changing the SVGs or color mapping. It e
 
 Icons use a single color and are rendered as WPF DrawingImage objects. Selection files store only Id, Selected and Status, never drawing objects.
 
-archive.svg, settings.svg, browser-gaming.svg, video-call.svg, downloads.svg, modeling.svg, disk-map.svg and code-cursor.svg are original generic WinProvision symbols, not official brand logos. The development catalog contains 36 icons. Additional entries are defined in Assets/AdditionalApps.json.
+archive.svg and settings.svg are original generic WinProvision symbols. The expanded catalog contains 30 icons. Additional entries are defined in Assets/AdditionalApps.json.
 

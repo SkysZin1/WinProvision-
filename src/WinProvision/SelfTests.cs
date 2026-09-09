@@ -48,7 +48,9 @@ public static class SelfTests
   Reject(()=>new BuildProfile{InterfaceLanguage="unknown"}.Validate(),"Invalid UI language accepted.");
   L.SetLanguage(originalLanguage);
   var defaultXml=AnswerFile.Generate(new BuildProfile(),"");
-  Check(AppCatalog.Names.Count==30,"Expected the full 30-app catalog.");
+  Check(AppCatalog.Names.Count==36,"Expected the full 36-app catalog.");
+  foreach(var id in new[]{"Opera.OperaGX","Zoom.Zoom","qBittorrent.qBittorrent","BlenderFoundation.Blender","AntibodySoftware.WizTree","Anysphere.Cursor"})
+   Check(AppCatalog.Names.ContainsKey(id),"Missing new app: "+id);
   new BuildProfile{SelectedApps=AppCatalog.Names.Keys.ToHashSet(),AppSelectionMode="BeforeBoot"}.Validate();
   var appsProfile=new BuildProfile{AppSelectionMode="BeforeBoot",SelectedApps=["7zip.7zip","Mozilla.Firefox"]};
   var appsRoundTrip=JsonSerializer.Deserialize<BuildProfile>(JsonSerializer.Serialize(appsProfile))!;
