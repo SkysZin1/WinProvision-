@@ -1,10 +1,10 @@
 # WinProvision USB Builder
 
-Native Windows desktop application (C# / WPF) for creating a personalized Windows installation USB. Version 0.4.0 is a working preview, with an implemented USB writer; real installation/boot testing is still required before a stable release.
+Native Windows desktop application (C# / WPF) for creating a personalized Windows installation USB. Version 0.5.0 is the current release, with the activation option and the USB writer included. Real installation/boot testing is still required before a stable release.
 
 ## Open the app
 
-Run `artifacts\WinProvision-desktop-v0.4.0\WinProvision.exe` (the latest package with the app picker) or `bin\Release\net8.0-windows\WinProvision.exe` after building. Keep the executable, DLLs, runtime configuration and `Scripts` folder together. This build needs the **.NET 8 Desktop Runtime** on the computer preparing the USB; it is already installed on this development computer. The installed target Windows uses built-in Windows PowerShell/WPF for customization and the app picker and does not need .NET 8.
+Run `artifacts\WinProvision-desktop-v0.5.0\WinProvision.exe` (the latest packaged build) or `bin\Release\net8.0-windows\WinProvision.exe` after building. Keep the executable, DLLs, runtime configuration and `Scripts` folder together. This build needs the **.NET 8 Desktop Runtime** on the computer preparing the USB; it is already installed on this development computer. The installed target Windows uses built-in Windows PowerShell/WPF for customization and the app picker and does not need .NET 8.
 
 The interface is English. No terminal is needed to use the app. Administrator permission is requested only when starting the USB writer.
 

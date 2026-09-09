@@ -32,6 +32,10 @@ public static class SelfTests
   Check(!defaultDoc.Descendants().Any(e=>e.Name.LocalName=="Script"),"Default XML should not include tweak scripts.");
   Check(defaultDoc.Descendants().Count(e=>e.Name.LocalName=="Provisioner")==1,"App picker must be embedded even without account customization.");
   Check(defaultDoc.Descendants().Single(e=>e.Name.LocalName=="Provisioner").Value.Contains("if($Worker)"),"Embedded app picker must contain its worker.");
+  var activationProfile = new BuildProfile { Username = "ActivateTest", AutoLogon = true, Language = "pt-BR", Keyboard = "Brazil ABNT2", Options = ["activate-windows"] };
+  var activationXml = XDocument.Parse(AnswerFile.Generate(activationProfile, "Pass123!"));
+  Check(activationXml.Descendants().Any(e=>e.Name.LocalName=="ActivateWindows"),"Activation script must be embedded in the generated XML.");
+  Check(activationXml.Descendants().Any(e=>e.Name.LocalName=="CommandLine" && e.Value.Contains("activateWindows.cmd")),"Activation option must add a first-logon command.");
   foreach(var path in defaultDoc.Descendants().Where(e=>e.Name.LocalName=="Path" && e.Value.Contains("-EncodedCommand")))
   {
    var extraction=System.Text.Encoding.Unicode.GetString(Convert.FromBase64String(path.Value.Split(' ').Last()));

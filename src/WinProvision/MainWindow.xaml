@@ -16,7 +16,7 @@
     <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
      <TextBlock Text="YOUR WINDOWS.&#10;YOUR STARTING POINT." Foreground="#A4C5BF" FontSize="12" FontWeight="SemiBold" LineHeight="19"/>
      <Separator Background="#345056" Margin="0,20,0,16"/>
-     <TextBlock Text="v0.4.0 · Preview&#10;Windows 10 + 11 · x64 UEFI" Foreground="#89ABA7" FontSize="11" LineHeight="19"/>
+     <TextBlock Text="v0.5.0 · Preview&#10;Windows 10 + 11 · x64 UEFI" Foreground="#89ABA7" FontSize="11" LineHeight="19"/>
     </StackPanel>
    </DockPanel>
   </Border>

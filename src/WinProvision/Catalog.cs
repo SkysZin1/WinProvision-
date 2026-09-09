@@ -4,9 +4,6 @@ public static class Catalog
  const string Both = "Windows 10 & 11 · effect may vary by edition/build";
  const string Eleven = "Windows 11 only · availability depends on build";
  const string Ten = "Windows 10 only";
- // Safe example command for the optional setup hook. Replace this value only
- // with a reviewed, legitimate command; it is embedded in the generated XML.
- const string SetupCommandHook = "& cmd.exe /c \"echo WinProvision setup hook completed > %WINDIR%\\Setup\\Scripts\\WinProvision\\CommandHook.log\"";
  static Tweak Reg(string id, string cat, string title, string desc, string path, string name, string value, string type = "DWord", string compat = Both, bool advanced = false)
  {
   var scope = path.StartsWith("HKCU") ? "User" : "System";
@@ -17,7 +14,7 @@ public static class Catalog
   new("hide-online", "Setup", "Hide Microsoft account screens", "Use with a configured local account. OOBE behavior varies between Windows builds; this is not a universal offline bypass.", Both, "Xml", ""),
   new("hide-wifi", "Setup", "Hide wireless setup screen", "Suppress the wireless setup page where supported. Does not install network drivers or guarantee offline setup.", Both, "Xml", ""),
   new("privacy-oobe", "Setup", "Skip express privacy choices", "Set ProtectYourPC to 3. This does not disable all Windows telemetry.", Both, "Xml", ""),
-  new("setup-command-hook", "Setup", "Run setup command hook", "Run the reviewed command defined in Catalog.cs during setup. The example only writes a log file; edit the marked constant for a legitimate deployment command.", Both, "System", SetupCommandHook, true),
+  new("activate-windows", "Setup", "Activate Windows", "Run the bundled activation script after the first user signs in, right after the app picker starts.", Both, "Xml", ""),
   new("bypass-hardware", "Setup", "Bypass hardware checks", "Request TPM, Secure Boot and RAM check bypasses. Unsupported installation; newer builds may ignore these registry settings.", Eleven, "PE", "", true),
   Reg("extensions", "Explorer", "Show file extensions", "Display extensions such as .txt and .exe for known file types.", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "HideFileExt", "0"),
   Reg("hidden", "Explorer", "Show hidden files", "Show hidden files while retaining Windows' protected-system-file setting.", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Hidden", "1"),

@@ -41,4 +41,4 @@ The project validates XML generation, XAML loading, search and category filterin
 
 Application icons are bundled as vector data in the executable and answer file. No internet connection is required to display them. Source files and license information are in `src/WinProvision/Assets/AppIcons`.
 
-Version 0.4.0 uses category buttons matching the Builder settings navigation. The Builder logo is bundled in the executable; its source is `src/WinProvision/Assets/Logo.xaml` and its generation helper is `tools/Build-Logo.ps1`.
+Version 0.5.0 uses category buttons matching the Builder settings navigation. The Builder logo is bundled in the executable; its source is `src/WinProvision/Assets/Logo.xaml` and its generation helper is `tools/Build-Logo.ps1`.

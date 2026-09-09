@@ -1,4 +1,4 @@
-# Expanded app catalog — v0.4.0
+# Expanded app catalog — v0.5.0
 
 The picker now includes 30 apps across 11 categories. Choices work both in the Builder and after first boot. Nothing is preselected by default.
 
