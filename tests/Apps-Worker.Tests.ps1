@@ -13,9 +13,14 @@ function Test-Path {
 function Add-AppxPackage { throw 'Registration must not be called in these tests.' }
 function Start-Sleep { param($Seconds) }
 function Invoke-WebRequest {
- param($Uri,$OutFile,[switch]$UseBasicParsing,$ErrorAction,$TimeoutSec)
+ param($Uri,$OutFile,[switch]$UseBasicParsing,$ErrorAction,$TimeoutSec,$Method)
+ if($Uri -eq 'https://cdn.winget.microsoft.com/cache/source.msix'){
+  if($global:wpAppCase -in @('offline','captive-portal')){throw 'Download service unreachable'}
+  if($Method -ne 'Head'){throw 'Connectivity check must not download the package'}
+  return [pscustomobject]@{StatusCode=200}
+ }
  if($Uri -eq 'https://www.msftconnecttest.com/connecttest.txt'){
-  if($global:wpAppCase -eq 'offline'){throw 'No connection'}
+  if($global:wpAppCase -in @('offline','connectivity-endpoint-failure')){throw 'No connection'}
   return [pscustomobject]@{StatusCode=200;Content=if($global:wpAppCase -eq 'captive-portal'){'Sign in'}else{'Microsoft Connect Test'}}
  }
  if(-not $OutFile -or $Uri -notlike 'https://*'){throw 'Unexpected download'}
@@ -40,7 +45,7 @@ function Start-Process {
  if($global:wpAppCase -eq 'cancel'){[IO.File]::WriteAllText((Join-Path $global:wpAppJob 'stop'),'stop')}
  [pscustomobject]@{ExitCode=if($global:wpAppCase -eq 'failure' -and $global:wpAppCalls -eq 1){123}elseif($global:wpAppCase -eq 'already-installed'){[int]0x8A150061}else{0}}
 }
-foreach($scenario in @('success','failure','cancel','invalid','missing-winget','already-installed','store','nvidia','nvidia-untrusted','offline','captive-portal','broken-winget','winget-timeout')) {
+foreach($scenario in @('success','failure','cancel','invalid','missing-winget','already-installed','store','nvidia','nvidia-untrusted','offline','captive-portal','broken-winget','winget-timeout','connectivity-endpoint-failure')) {
  $global:wpAppCase=$scenario;$global:wpAppCalls=0
  $global:wpAppJob=Join-Path $root ('artifacts\app-worker-tests\'+[guid]::NewGuid().ToString('N'))
  New-Item -ItemType Directory -Path $global:wpAppJob -Force | Out-Null
@@ -49,6 +54,7 @@ foreach($scenario in @('success','failure','cancel','invalid','missing-winget','
  & (Join-Path $root 'Scripts\Provisioner.ps1') -Worker -JobPath $global:wpAppJob -UiLanguage $UiLanguage
  $result=Get-Content -LiteralPath (Join-Path $global:wpAppJob 'status.json') -Raw | ConvertFrom-Json
  if(-not $result.Done){throw 'Worker did not finish.'}
+ if($scenario -eq 'connectivity-endpoint-failure' -and ($global:wpAppCalls -ne 2 -or @($result.Items | Where-Object Status -ne 'Completed').Count)){throw 'Fallback connectivity check failed.'}
  if($scenario -in @('offline','captive-portal','missing-winget','broken-winget','winget-timeout')){
   if($global:wpAppCalls -ne 0 -or $result.Items.Count -ne 2 -or @($result.Items | Where-Object Status -ne 'Failed').Count){throw 'Preflight did not prevent installation or preserve retry IDs.'}
   if($scenario -in @('offline','captive-portal') -and $result.Message -ne (T 'Internet access could not be verified. Connect to Wi-Fi or Ethernet, complete any network sign-in, then retry. No apps were installed.')){throw 'Internet guidance failed.'}
@@ -75,4 +81,4 @@ foreach($scenario in @('success','failure','cancel','invalid','missing-winget','
   Write-Output 'PASS: retry failure without repeating successful app'
  }
 }
-Write-Output 'PASS: 14 worker scenarios. No software was downloaded, registered or installed.'
+Write-Output 'PASS: 15 worker scenarios. No software was downloaded, registered or installed.'
