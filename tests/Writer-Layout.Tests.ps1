@@ -1,6 +1,8 @@
 $ErrorActionPreference='Stop'
 # Load only the preparation function; never execute the writer or real disk cmdlets.
-$writer=Join-Path (Split-Path $PSScriptRoot) 'Scripts\Build-Usb.ps1'
+$writer=Join-Path (Split-Path $PSScriptRoot) 'src\WinProvision\Scripts\Build-Usb.ps1'
+$UiLanguage='en-US'
+. (Join-Path (Split-Path $writer) 'Localization.ps1')
 $tokens=$null; $errors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($writer,[ref]$tokens,[ref]$errors)
 if($errors.Count) { throw 'Writer parse failed.' }

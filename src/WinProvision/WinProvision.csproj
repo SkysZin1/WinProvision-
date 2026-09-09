@@ -6,7 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>WinProvision</AssemblyName>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <ApplicationIcon>Assets\WinProvision.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -14,6 +15,8 @@
   <ItemGroup><None Include="Scripts\activateWindows.cmd" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
   <ItemGroup><None Update="Scripts\Bundle-AppIcons.ps1" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" /></ItemGroup>
   <ItemGroup><EmbeddedResource Include="Scripts\Provisioner.ps1" /></ItemGroup>
+  <ItemGroup><EmbeddedResource Include="Scripts\Localization.ps1" /></ItemGroup>
   <ItemGroup><EmbeddedResource Include="Assets\AdditionalApps.json" /></ItemGroup>
+  <ItemGroup><EmbeddedResource Include="Assets\Translations.json" /><None Update="Assets\Translations.json" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
   <ItemGroup><Resource Include="Assets\Logo.png" /><Resource Include="Assets\WinProvision.ico" /></ItemGroup>
 </Project>

@@ -7,6 +7,7 @@ public partial class App : Application
  protected override void OnStartup(StartupEventArgs e)
  {
   base.OnStartup(e);
+  L.SetLanguage(L.Language);
   if (e.Args.Contains("--self-test"))
   {
    try { SelfTests.Run(); Shutdown(0); }
@@ -14,6 +15,7 @@ public partial class App : Application
    return;
   }
   DispatcherUnhandledException += (_, args) => { MessageBox.Show(args.Exception.Message, "WinProvision", MessageBoxButton.OK, MessageBoxImage.Error); args.Handled = true; };
+  L.LoadPreference();
   new MainWindow().Show();
  }
 }

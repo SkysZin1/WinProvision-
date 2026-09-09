@@ -5,11 +5,48 @@ using System.Xml.Linq;
 namespace WinProvision;
 public static class SelfTests
 {
+ internal static void RenderInterface(System.Windows.FrameworkElement content,string name,int width,int height)
+ {
+  var background=new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(243,246,245));
+  if(content is System.Windows.Controls.Panel panel)panel.Background=background;
+  if(content is System.Windows.Controls.Control control)control.Background=background;
+  content.Measure(new System.Windows.Size(width,height));
+  content.Arrange(new System.Windows.Rect(0,0,width,height));content.UpdateLayout();
+  var bitmap=new System.Windows.Media.Imaging.RenderTargetBitmap(width,height,96,96,System.Windows.Media.PixelFormats.Pbgra32);
+  bitmap.Render(content);
+  var encoder=new System.Windows.Media.Imaging.PngBitmapEncoder();encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmap));
+  var folder=Path.Combine(AppContext.BaseDirectory,"ui-validation");Directory.CreateDirectory(folder);
+  using var file=File.Create(Path.Combine(folder,name+".png"));encoder.Save(file);
+ }
  public static void Run()
  {
   int passed=0;
   void Check(bool result,string message){if(!result)throw new Exception(message);passed++;}
   void Reject(Action action,string message){try{action();}catch(ArgumentException){passed++;return;}catch(InvalidDataException){passed++;return;}throw new Exception(message);}
+  var originalLanguage=L.Language;
+  foreach(var language in new[]{"pt-BR","en-US"})
+  {
+   L.SetLanguage(language);
+   Check(L.T("Recommended")==(language=="pt-BR"?"Recomendado":"Recommended"),"Preset translation failed.");
+   Check(L.F($"ERASE DISK {99}")==(language=="pt-BR"?"APAGAR DISCO 99":"ERASE DISK 99"),"Typed confirmation translation failed.");
+   Check(L.F($"{2} app(s) selected.")==(language=="pt-BR"?"2 aplicativo(s) selecionado(s).":"2 app(s) selected."),"Formatted translation failed.");
+   var bilingual=new BuildProfile{InterfaceLanguage=language,Options=["extensions"]};
+   var saved=JsonSerializer.Deserialize<BuildProfile>(JsonSerializer.Serialize(bilingual))!;
+   Check(saved.InterfaceLanguage==language && saved.Options.SetEquals(bilingual.Options),"Language/profile round-trip failed.");
+   Check(InstallationPresets.Create(InstallationPresets.Recommended,bilingual).InterfaceLanguage==language,"Preset lost interface language.");
+   var xml=XDocument.Parse(AnswerFile.Generate(bilingual,""));
+   Check(xml.Descendants().Single(e=>e.Name.LocalName=="Provisioner").Value.Contains("\"InterfaceLanguage\":\""+language+"\""),"Picker language missing from XML.");
+   Check(xml.Descendants().Any(e=>e.Name.LocalName=="Localization") && xml.Descendants().Any(e=>e.Name.LocalName=="LocalizationScript"),"Offline localization resources missing.");
+   Check(Catalog.All.Single(o=>o.Id=="remove-weather").DisplayTitle==(language=="pt-BR"?"Remover Clima":"Remove Weather"),"Removal translation failed.");
+   if(language=="pt-BR"){
+    foreach(var option in Catalog.All){
+     Check(option.DisplayTitle!=option.Title && option.DisplayDescription!=option.Description,"Missing option translation: "+option.Id);
+     Check(option.DisplayCompatibility!=option.Compatibility,"Missing compatibility translation: "+option.Id);
+    }
+   }
+  }
+  Reject(()=>new BuildProfile{InterfaceLanguage="unknown"}.Validate(),"Invalid UI language accepted.");
+  L.SetLanguage(originalLanguage);
   var defaultXml=AnswerFile.Generate(new BuildProfile(),"");
   Check(AppCatalog.Names.Count==30,"Expected the full 30-app catalog.");
   new BuildProfile{SelectedApps=AppCatalog.Names.Keys.ToHashSet(),AppSelectionMode="BeforeBoot"}.Validate();
@@ -77,8 +114,14 @@ public static class SelfTests
    var recommended=InstallationPresets.Create(InstallationPresets.Recommended,custom);
    recommended.Validate();
    Check(recommended.Options.SetEquals(InstallationPresets.RecommendedOptions),"Recommended selection must contain the documented tweaks and OOBE settings.");
-   Check(Catalog.All.Where(o=>recommended.Options.Contains(o.Id)).All(o=>o.Supports(os) && !o.Advanced && !o.Id.StartsWith("remove-")),"Recommended must not include incompatible, advanced or removal options.");
+   Check(Catalog.All.Where(o=>recommended.Options.Contains(o.Id)).All(o=>o.Supports(os) && !o.Advanced),"Recommended must not include incompatible or advanced options.");
    var recommendedXml=XDocument.Parse(AnswerFile.Generate(recommended,"Sample-password-42"));
+   var removalIds = new[] { "remove-solitaire", "remove-news", "remove-weather", "remove-gethelp", "remove-feedback", "remove-todos" };
+   Check(recommended.Options.Where(id => id.StartsWith("remove-")).ToHashSet().SetEquals(removalIds), "Recommended must remove exactly the six selected apps.");
+   var removalScript = recommendedXml.Descendants().Single(e => e.Name.LocalName == "Script").Value;
+   foreach (var id in removalIds)
+    Check(removalScript.Contains(Catalog.All.Single(o => o.Id == id).Code), "Recommended XML must include removal code for " + id);
+   Check(!removalScript.Contains("Microsoft.WindowsCalculator"), "Optional removals must not leak into Recommended.");
    Check(recommended.DesktopReady && recommended.AutoLogon && recommended.Administrator && recommended.Username.Length>0,"Recommended must create a local administrator and sign in once.");
    foreach(var element in new[]{"AutoLogon","LocalAccount","HideOnlineAccountScreens","HideWirelessSetupInOOBE","HideEULAPage","HideOEMRegistrationScreen","ProtectYourPC","TimeZone"})
     Check(recommendedXml.Descendants().Any(e=>e.Name.LocalName==element),"Recommended XML missing "+element);
@@ -101,6 +144,7 @@ public static class SelfTests
   }
   Check(JsonSerializer.Deserialize<BuildProfile>("{\"Windows\":\"10\",\"Options\":[\"hidden\"]}")!.InstallationProfile==InstallationPresets.Custom,"Legacy profiles must load as Custom.");
   Reject(()=>new BuildProfile {InstallationProfile="Unrecognized"}.Validate(),"Unknown preset accepted.");
+  new MainWindow().VerifyInterface(Check);
   File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"self-test.txt"),$"PASS: {passed} checks. No disks were written and no generated configuration scripts were executed.");
  }
 }

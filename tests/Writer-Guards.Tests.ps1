@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$workspace=Split-Path $PSScriptRoot
+$workspace=Join-Path (Split-Path $PSScriptRoot) 'src\WinProvision'
 $testRoot=Join-Path $workspace 'artifacts\writer-guard-tests'
 New-Item -ItemType Directory -Path $testRoot -Force | Out-Null
 $global:wpTestDestructiveCalls=0
@@ -18,7 +18,7 @@ foreach($case in @('system','internal','changed','source-on-usb','invalid-iso'))
  $caseDir=Join-Path $testRoot $case
  New-Item -ItemType Directory -Path $caseDir -Force | Out-Null
  $jobFile=Join-Path $caseDir 'job.json'
- @{IsoPath=(Join-Path $workspace 'does-not-exist.iso');DiskNumber=99;UniqueId='TEST-USB';Size=[uint64]16GB;Windows='11';Edition='Pro';Language='ISO default';AnswerFile=(Join-Path $caseDir 'answer.xml');AppDirectory=$workspace} | ConvertTo-Json | Set-Content -LiteralPath $jobFile -Encoding UTF8
+ @{IsoPath=(Join-Path $workspace 'does-not-exist.iso');DiskNumber=99;UniqueId='TEST-USB';Size=[uint64]16GB;Windows='11';Edition='Pro';Language='ISO default';InterfaceLanguage='en-US';AnswerFile=(Join-Path $caseDir 'answer.xml');AppDirectory=$workspace} | ConvertTo-Json | Set-Content -LiteralPath $jobFile -Encoding UTF8
  & (Join-Path $workspace 'Scripts\Build-Usb.ps1') -JobPath $jobFile
  $result=Get-Content -LiteralPath (Join-Path $caseDir 'result.json') -Raw | ConvertFrom-Json
  if($result.Success -or $global:wpTestDestructiveCalls -ne 0) { throw "Guard failed: $case" }

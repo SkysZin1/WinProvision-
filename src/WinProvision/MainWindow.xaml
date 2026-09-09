@@ -1,92 +1,93 @@
-<Window x:Class="WinProvision.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="WinProvision — USB Builder" Icon="Assets/WinProvision.ico" Width="1220" Height="820" MinWidth="1000" MinHeight="680" WindowStartupLocation="CenterScreen">
+<Window x:Class="WinProvision.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="{DynamicResource Ui001}" Icon="Assets/WinProvision.ico" Width="1220" Height="820" MinWidth="1000" MinHeight="680" WindowStartupLocation="CenterScreen">
  <Grid>
-  <Grid.ColumnDefinitions><ColumnDefinition Width="224"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+  <Grid.ColumnDefinitions><ColumnDefinition Width="254"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
   <Border Background="#122E33" Padding="24,30">
    <DockPanel>
     <StackPanel DockPanel.Dock="Top">
-     <Image Source="Assets/Logo.png" Width="56" Height="56" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality" AutomationProperties.Name="WinProvision USB Builder logo"/>
+     <Image Source="Assets/Logo.png" Width="56" Height="56" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality" AutomationProperties.Name="{DynamicResource Ui002}"/>
      <TextBlock Text="WinProvision" Foreground="White" FontSize="23" FontWeight="SemiBold" Margin="0,18,0,3"/>
-     <TextBlock Text="USB BUILDER" Foreground="#9DBEBB" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,38"/>
-     <Button x:Name="MediaNav" Content="01   Installation media" Click="Media_Click" HorizontalContentAlignment="Left" Margin="0,0,0,10"/>
-     <Button x:Name="OptionsNav" Content="02   Windows settings" Click="Options_Click" Margin="0,0,0,10"/>
-     <Button x:Name="ReviewNav" Content="03   Review &amp; create" Click="Review_Click"/>
-     <Button Content="Applications…" Click="Applications_Click" Margin="0,12,0,0"/>
-     <Button Content="Preview app picker" Click="AppsPreview_Click" Margin="0,20,0,0"/>
+     <TextBlock Text="{DynamicResource Ui003}" Foreground="#9DBEBB" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,38"/>
+     <Button x:Name="MediaNav" Content="{DynamicResource Ui004}" Click="Media_Click" HorizontalContentAlignment="Left" Margin="0,0,0,10"/>
+     <Button x:Name="OptionsNav" Content="{DynamicResource Ui005}" Click="Options_Click" Margin="0,0,0,10"/>
+     <Button x:Name="ReviewNav" Content="{DynamicResource Ui006}" Click="Review_Click"/>
+     <Button Content="{DynamicResource Ui007}" Click="Applications_Click" Margin="0,12,0,0"/>
     </StackPanel>
     <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
-     <TextBlock Text="YOUR WINDOWS.&#10;YOUR STARTING POINT." Foreground="#A4C5BF" FontSize="12" FontWeight="SemiBold" LineHeight="19"/>
+     <TextBlock Text="{DynamicResource Ui008}" Foreground="#A4C5BF" FontSize="12" FontWeight="SemiBold" LineHeight="19"/>
+     <TextBlock Text="Idioma / Language" Foreground="#A4C5BF" FontSize="12" Margin="0,18,0,6"/>
+     <ComboBox x:Name="InterfaceLanguageChoice" SelectionChanged="InterfaceLanguage_Changed" AutomationProperties.Name="Idioma / Language"><ComboBoxItem Content="Português (Brasil)" Tag="pt-BR"/><ComboBoxItem Content="English" Tag="en-US"/></ComboBox>
      <Separator Background="#345056" Margin="0,20,0,16"/>
-     <TextBlock Text="v0.5.0 · Preview&#10;Windows 10 + 11 · x64 UEFI" Foreground="#89ABA7" FontSize="11" LineHeight="19"/>
+     <TextBlock Text="{DynamicResource Ui009}" Foreground="#89ABA7" FontSize="11" LineHeight="19"/>
     </StackPanel>
    </DockPanel>
   </Border>
   <Grid Grid.Column="1" Margin="34,26,34,20">
    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
    <Grid Margin="0,0,0,22"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-    <StackPanel><TextBlock x:Name="PageEyebrow" Text="STEP 01 / 03" Foreground="{StaticResource Accent}" FontSize="11" FontWeight="Bold"/><TextBlock x:Name="PageTitle" Text="A fresh start begins here." FontSize="29" FontWeight="SemiBold" Margin="0,6,0,6"/><TextBlock x:Name="PageSubtitle" Text="Bring your Windows ISO. Build an installation that feels like yours." Foreground="{StaticResource Muted}"/></StackPanel>
-    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="12,0,0,0"><Button Content="Load profile" Click="Load_Click" Margin="0,0,8,0" Padding="12,8"/><Button Content="Save profile" Click="Save_Click" Padding="12,8"/></StackPanel>
+    <StackPanel><TextBlock x:Name="PageEyebrow" Text="{DynamicResource Ui010}" Foreground="{StaticResource Accent}" FontSize="11" FontWeight="Bold"/><TextBlock x:Name="PageTitle" Text="{DynamicResource Ui011}" FontSize="29" FontWeight="SemiBold" Margin="0,6,0,6"/><TextBlock x:Name="PageSubtitle" Text="{DynamicResource Ui012}" Foreground="{StaticResource Muted}"/></StackPanel>
+    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="12,0,0,0"><Button Content="{DynamicResource Ui013}" Click="Load_Click" Margin="0,0,8,0" Padding="12,8"/><Button Content="{DynamicResource Ui014}" Click="Save_Click" Padding="12,8"/></StackPanel>
    </Grid>
    <Grid Grid.Row="1">
     <ScrollViewer x:Name="MediaPage" VerticalScrollBarVisibility="Auto">
      <StackPanel>
-      <Border Background="#E2F0E9" CornerRadius="12" Padding="23" Margin="0,0,0,20"><StackPanel><TextBlock Text="Official Windows. Personal configuration." FontSize="19" FontWeight="SemiBold"/><TextBlock Text="Create a bootable USB with your settings. Choose the installation disk on the target PC. At first sign-in, WinProvision Apps opens so you can select what to install." Foreground="#3E6258" Margin="0,8,0,0"/></StackPanel></Border>
+      <Border Background="#E2F0E9" CornerRadius="12" Padding="23" Margin="0,0,0,20"><StackPanel><TextBlock Text="{DynamicResource Ui015}" FontSize="19" FontWeight="SemiBold"/><TextBlock Text="{DynamicResource Ui016}" Foreground="#3E6258" Margin="0,8,0,0"/></StackPanel></Border>
       <Border Background="White" BorderBrush="#DFE7E2" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,16"><StackPanel>
-       <TextBlock Text="Windows installation image" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="Select an unmodified ISO downloaded from Microsoft." Foreground="{StaticResource Muted}" Margin="0,5,0,14"/>
-       <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBox x:Name="IsoPath" IsReadOnly="True" Text="No ISO selected"/><Button Grid.Column="1" Content="Browse ISO…" Click="Browse_Click" Margin="10,0,0,0"/></Grid>
+       <TextBlock Text="{DynamicResource Ui017}" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="{DynamicResource Ui018}" Foreground="{StaticResource Muted}" Margin="0,5,0,14"/>
+       <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBox x:Name="IsoPath" IsReadOnly="True" Text="{DynamicResource Ui019}"/><Button Grid.Column="1" Content="{DynamicResource Ui020}" Click="Browse_Click" Margin="10,0,0,0"/></Grid>
        <Grid Margin="0,18,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-        <StackPanel Margin="0,0,10,0"><TextBlock Text="Target Windows" Margin="0,0,0,6"/><ComboBox x:Name="WindowsChoice" SelectionChanged="Windows_Changed"><ComboBoxItem Content="Windows 11" IsSelected="True"/><ComboBoxItem Content="Windows 10"/></ComboBox></StackPanel>
-        <StackPanel Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="Edition" Margin="0,0,0,6"/><ComboBox x:Name="EditionChoice"/></StackPanel>
+        <StackPanel Margin="0,0,10,0"><TextBlock Text="{DynamicResource Ui021}" Margin="0,0,0,6"/><ComboBox x:Name="WindowsChoice" SelectionChanged="Windows_Changed"><ComboBoxItem Content="Windows 11" IsSelected="True"/><ComboBoxItem Content="Windows 10"/></ComboBox></StackPanel>
+        <StackPanel Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="{DynamicResource Ui022}" Margin="0,0,0,6"/><ComboBox x:Name="EditionChoice"/></StackPanel>
        </Grid>
-       <TextBlock Text="The writer checks the ISO version, architecture and selected edition before erasing the USB." FontSize="12" Foreground="{StaticResource Muted}" Margin="0,12,0,0"/>
-       <Button Content="Open Microsoft download page ↗" Click="Download_Click" HorizontalAlignment="Left" Margin="0,14,0,0" Padding="0,3" Background="Transparent" BorderThickness="0" Foreground="{StaticResource Accent}"/>
+       <TextBlock Text="{DynamicResource Ui023}" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,12,0,0"/>
+       <Button Content="{DynamicResource Ui024}" Click="Download_Click" HorizontalAlignment="Left" Margin="0,14,0,0" Padding="0,3" Background="Transparent" BorderThickness="0" Foreground="{StaticResource Accent}"/>
       </StackPanel></Border>
       <Border Background="White" BorderBrush="#DFE7E2" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,16"><StackPanel>
-       <TextBlock Text="Destination USB" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="Select the physical device. All its partitions will be erased when you confirm creation." Foreground="{StaticResource Muted}" Margin="0,5,0,14"/>
-       <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><ComboBox x:Name="DiskChoice" MinWidth="320"/><Button Grid.Column="1" x:Name="RefreshButton" Content="Refresh" Click="Refresh_Click" Margin="10,0,0,0"/></Grid>
-       <TextBlock x:Name="DiskStatus" Text="Devices are never selected automatically." FontSize="12" Foreground="{StaticResource Muted}" Margin="0,10,0,0"/>
+       <TextBlock Text="{DynamicResource Ui025}" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="{DynamicResource Ui026}" Foreground="{StaticResource Muted}" Margin="0,5,0,14"/>
+       <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><ComboBox x:Name="DiskChoice" MinWidth="320"/><Button Grid.Column="1" x:Name="RefreshButton" Content="{DynamicResource Ui027}" Click="Refresh_Click" Margin="10,0,0,0"/></Grid>
+       <TextBlock x:Name="DiskStatus" Text="{DynamicResource Ui028}" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,10,0,0"/>
       </StackPanel></Border>
-      <TextBlock Text="MEDIA FORMAT   UEFI · GPT · FAT32 · x64&#10;Large WIM images are split automatically. Boot partition: up to 30 GiB; remaining space is left unallocated. Legacy BIOS and large ESD files are not supported in this preview." Foreground="{StaticResource Muted}" FontSize="12" LineHeight="20" Margin="4,0,4,18"/>
+      <TextBlock Text="{DynamicResource Ui029}" Foreground="{StaticResource Muted}" FontSize="12" LineHeight="20" Margin="4,0,4,18"/>
      </StackPanel>
     </ScrollViewer>
     <ScrollViewer x:Name="ProfilePage" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
      <StackPanel Margin="0,0,8,0">
       <UniformGrid Columns="3" Margin="0,0,0,20">
        <Button x:Name="DefaultProfileButton" Click="DefaultProfile_Click" Padding="18" Margin="0,0,8,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-        <StackPanel><TextBlock x:Name="DefaultProfileState" Text="SELECTED" FontSize="10" Foreground="{StaticResource Accent}" FontWeight="Bold"/><TextBlock Text="Default" FontSize="23" FontWeight="SemiBold" Margin="0,12,0,8"/><TextBlock Text="The standard Windows experience." FontSize="13" FontWeight="Normal"/><TextBlock Text="Keep Windows defaults. Choose your account, region and preferences during Setup." Foreground="{StaticResource Muted}" FontWeight="Normal" FontSize="12" Margin="0,14,0,0"/></StackPanel>
+        <StackPanel><TextBlock x:Name="DefaultProfileState" Text="{DynamicResource Ui030}" FontSize="10" Foreground="{StaticResource Accent}" FontWeight="Bold"/><TextBlock Text="{DynamicResource Ui031}" FontSize="20" FontWeight="SemiBold" Margin="0,12,0,8"/><TextBlock Text="{DynamicResource Ui032}" FontSize="13" FontWeight="Normal"/><TextBlock Text="{DynamicResource Ui033}" Foreground="{StaticResource Muted}" FontWeight="Normal" FontSize="12" Margin="0,14,0,0"/></StackPanel>
        </Button>
        <Button x:Name="RecommendedProfileButton" Click="RecommendedProfile_Click" Padding="18" Margin="4,0,4,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-        <StackPanel><TextBlock x:Name="RecommendedProfileState" Text="EVERYDAY USE" FontSize="10" Foreground="{StaticResource Accent}" FontWeight="Bold"/><TextBlock Text="Recommended" FontSize="23" FontWeight="SemiBold" Margin="0,12,0,8"/><TextBlock Text="Set it up here. Start at the desktop." FontSize="13" FontWeight="Normal"/><TextBlock Text="Local account, automatic first sign-in and preset Windows setup answers, plus everyday adjustments." Foreground="{StaticResource Muted}" FontWeight="Normal" FontSize="12" Margin="0,14,0,0"/></StackPanel>
+        <StackPanel><TextBlock x:Name="RecommendedProfileState" Text="{DynamicResource Ui034}" FontSize="10" Foreground="{StaticResource Accent}" FontWeight="Bold"/><TextBlock Text="{DynamicResource Ui035}" FontSize="20" FontWeight="SemiBold" Margin="0,12,0,8"/><TextBlock Text="{DynamicResource Ui036}" FontSize="13" FontWeight="Normal"/><TextBlock Text="{DynamicResource Ui037}" Foreground="{StaticResource Muted}" FontWeight="Normal" FontSize="12" Margin="0,14,0,0"/></StackPanel>
        </Button>
        <Button x:Name="CustomProfileButton" Click="CustomProfile_Click" Padding="18" Margin="8,0,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-        <StackPanel><TextBlock x:Name="CustomProfileState" Text="FULL CONTROL" FontSize="10" Foreground="{StaticResource Accent}" FontWeight="Bold"/><TextBlock Text="Custom" FontSize="23" FontWeight="SemiBold" Margin="0,12,0,8"/><TextBlock Text="Choose every setting yourself." FontSize="13" FontWeight="Normal"/><TextBlock Text="Open the full settings catalog, including accounts, appearance and advanced options." Foreground="{StaticResource Muted}" FontWeight="Normal" FontSize="12" Margin="0,14,0,0"/></StackPanel>
+        <StackPanel><TextBlock x:Name="CustomProfileState" Text="{DynamicResource Ui038}" FontSize="10" Foreground="{StaticResource Accent}" FontWeight="Bold"/><TextBlock Text="{DynamicResource Ui039}" FontSize="20" FontWeight="SemiBold" Margin="0,12,0,8"/><TextBlock Text="{DynamicResource Ui040}" FontSize="13" FontWeight="Normal"/><TextBlock Text="{DynamicResource Ui041}" Foreground="{StaticResource Muted}" FontWeight="Normal" FontSize="12" Margin="0,14,0,0"/></StackPanel>
        </Button>
       </UniformGrid>
       <Border Background="White" BorderBrush="#DFE7E2" BorderThickness="1" CornerRadius="10" Padding="22">
-       <StackPanel><TextBlock x:Name="PresetSummaryTitle" FontSize="19" FontWeight="SemiBold"/><TextBlock x:Name="PresetSummaryIntro" Foreground="{StaticResource Muted}" Margin="0,8,0,14"/><StackPanel x:Name="PresetSummaryOptions"/><TextBlock x:Name="PresetSummaryNote" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,16,0,0"/><Button x:Name="CustomizePresetButton" Content="Customize this profile →" Click="CustomizePreset_Click" HorizontalAlignment="Left" Margin="0,18,0,0"/></StackPanel>
+       <StackPanel><TextBlock x:Name="PresetSummaryTitle" FontSize="19" FontWeight="SemiBold"/><TextBlock x:Name="PresetSummaryIntro" Foreground="{StaticResource Muted}" Margin="0,8,0,14"/><StackPanel x:Name="PresetSummaryOptions"/><TextBlock x:Name="PresetSummaryNote" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,16,0,0"/><Button x:Name="CustomizePresetButton" Content="{DynamicResource Ui042}" Click="CustomizePreset_Click" HorizontalAlignment="Left" Margin="0,18,0,0"/></StackPanel>
       </Border>
-      <TextBlock Text="Choosing a profile only changes this installation plan. Nothing is applied to your current PC or USB." FontSize="12" Foreground="{StaticResource Muted}" Margin="4,16,4,12"/>
+      <TextBlock Text="{DynamicResource Ui043}" FontSize="12" Foreground="{StaticResource Muted}" Margin="4,16,4,12"/>
      </StackPanel>
     </ScrollViewer>
     <Grid x:Name="OptionsPage" Visibility="Collapsed"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
-     <Button Content="← Installation profiles" Click="BackToProfiles_Click" HorizontalAlignment="Left" Padding="0,5" BorderThickness="0" Background="Transparent" Foreground="{StaticResource Accent}" Margin="0,0,0,12"/>
-     <Grid Grid.Row="1"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions><TextBlock Text="Search settings" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,6"/><TextBox Grid.Row="1" x:Name="Search" ToolTip="Search settings by name or description" TextChanged="Search_Changed"/><Button Grid.Row="1" Grid.Column="1" Content="Reset settings" Click="Reset_Click" Margin="12,0,0,0"/></Grid>
+     <Button Content="{DynamicResource Ui044}" Click="BackToProfiles_Click" HorizontalAlignment="Left" Padding="0,5" BorderThickness="0" Background="Transparent" Foreground="{StaticResource Accent}" Margin="0,0,0,12"/>
+     <Grid Grid.Row="1"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions><TextBlock Text="{DynamicResource Ui045}" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,6"/><TextBox Grid.Row="1" x:Name="Search" ToolTip="{DynamicResource Ui046}" TextChanged="Search_Changed"/><Button Grid.Row="1" Grid.Column="1" Content="{DynamicResource Ui047}" Click="Reset_Click" Margin="12,0,0,0"/></Grid>
      <WrapPanel x:Name="Categories" Grid.Row="2" Margin="0,12,0,10"/>
      <ScrollViewer x:Name="OptionsScroll" Grid.Row="3" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="OptionCards"/></ScrollViewer>
     </Grid>
     <ScrollViewer x:Name="ReviewPage" Visibility="Collapsed" VerticalScrollBarVisibility="Auto"><StackPanel>
-     <Border Background="White" CornerRadius="10" Padding="22" Margin="0,0,0,16"><StackPanel><TextBlock Text="Your installation plan" FontSize="19" FontWeight="SemiBold"/><TextBlock x:Name="ReviewSummary" Margin="0,14,0,0" LineHeight="25"/><Button Content="Preview generated XML" Click="Preview_Click" HorizontalAlignment="Left" Margin="0,16,0,0"/></StackPanel></Border>
+     <Border Background="White" CornerRadius="10" Padding="22" Margin="0,0,0,16"><StackPanel><TextBlock Text="{DynamicResource Ui048}" FontSize="19" FontWeight="SemiBold"/><TextBlock x:Name="ReviewSummary" Margin="0,14,0,0" LineHeight="25"/><Button Content="{DynamicResource Ui049}" Click="Preview_Click" HorizontalAlignment="Left" Margin="0,16,0,0"/></StackPanel></Border>
      <Border Background="#FFF1D9" BorderBrush="#E6CB98" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,16"><StackPanel>
-      <TextBlock Text="This will erase the entire selected USB." FontSize="17" FontWeight="SemiBold" Foreground="#7C4C12"/><TextBlock Text="Every partition and file on this USB will be deleted. The target PC's Windows disk will be chosen separately during Windows Setup." Foreground="#795D35" Margin="0,8,0,14"/>
-      <CheckBox x:Name="EraseConsent" Content="I have backed up this USB and understand that all its data will be erased."/>
-      <TextBlock x:Name="ConfirmLabel" Margin="0,16,0,6" Text="Type the device confirmation phrase:"/><TextBox x:Name="ConfirmText" MaxWidth="360" HorizontalAlignment="Left" MinWidth="280"/>
+      <TextBlock Text="{DynamicResource Ui050}" FontSize="17" FontWeight="SemiBold" Foreground="#7C4C12"/><TextBlock Text="{DynamicResource Ui051}" Foreground="#795D35" Margin="0,8,0,14"/>
+      <CheckBox x:Name="EraseConsent" Content="{DynamicResource Ui052}"/>
+      <TextBlock x:Name="ConfirmLabel" Margin="0,16,0,6" Text="{DynamicResource Ui053}"/><TextBox x:Name="ConfirmText" MaxWidth="360" HorizontalAlignment="Left" MinWidth="280"/>
      </StackPanel></Border>
-     <TextBlock Text="Local account passwords are omitted from saved profiles and previews. When configured, the actual password is written to the USB answer file as plaintext; keep this media private. Windows-side cleanup requires the first sign-in to be an administrator." Foreground="{StaticResource Muted}" FontSize="12" Margin="4,0,4,16"/>
-     <Button x:Name="CreateButton" Content="Erase USB &amp; create installation media" Style="{StaticResource Primary}" HorizontalAlignment="Left" Click="Create_Click" Padding="22,14"/>
+     <TextBlock Text="{DynamicResource Ui054}" Foreground="{StaticResource Muted}" FontSize="12" Margin="4,0,4,16"/>
+     <Button x:Name="CreateButton" Content="{DynamicResource Ui055}" Style="{StaticResource Primary}" HorizontalAlignment="Left" Click="Create_Click" Padding="22,14"/>
     </StackPanel></ScrollViewer>
    </Grid>
    <Border Grid.Row="2" BorderBrush="#DAE3DE" BorderThickness="0,1,0,0" Padding="0,16,0,0" Margin="0,14,0,0"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-    <StackPanel><TextBlock x:Name="StatusText" Text="Ready to configure. No USB changes have been made." Foreground="{StaticResource Muted}" FontSize="12"/><ProgressBar x:Name="Progress" Visibility="Collapsed" Height="4" Margin="0,10,20,0" Foreground="{StaticResource Accent}"/><Button x:Name="LogButton" Visibility="Collapsed" Content="Open build log" Click="Log_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Padding="8,4"/></StackPanel>
-    <Button x:Name="NextButton" Grid.Column="1" Content="Windows settings →" Style="{StaticResource Primary}" Click="Next_Click" Margin="16,0,0,0" VerticalAlignment="Top"/>
+    <StackPanel><TextBlock x:Name="StatusText" Text="{DynamicResource Ui056}" Foreground="{StaticResource Muted}" FontSize="12"/><ProgressBar x:Name="Progress" Visibility="Collapsed" Height="4" Margin="0,10,20,0" Foreground="{StaticResource Accent}"/><Button x:Name="LogButton" Visibility="Collapsed" Content="{DynamicResource Ui057}" Click="Log_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Padding="8,4"/></StackPanel>
+    <Button x:Name="NextButton" Grid.Column="1" Content="{DynamicResource Ui058}" Style="{StaticResource Primary}" Click="Next_Click" Margin="16,0,0,0" VerticalAlignment="Top"/>
    </Grid></Border>
   </Grid>
  </Grid>

@@ -4,13 +4,12 @@ The picker opens at the first sign-in for each account created from the Windows 
 
 ## Interface
 
-- English WPF interface running on Windows PowerShell 5.1; the newly installed Windows does not require .NET 8.
+- Brazilian Portuguese / English WPF interface running on Windows PowerShell 5.1; the newly installed Windows does not require .NET 8. Use **Idioma / Language** to change language while preserving the selection.
 - Search by name, category, or description, with category sections and filters.
 - Sequential queue with per-application results and logs.
 - A failed item remains selected for retry; one failure does not stop the queue.
 - **Stop after current app** finishes the active installer and then stops the queue.
 - **Maybe later** saves the selection. The **WinProvision Apps** desktop shortcut reopens the picker.
-- **Preview app picker** in the Builder opens a non-installing preview.
 
 ## Catalog
 
@@ -18,8 +17,8 @@ The catalog is a closed list of exact WinGet identifiers embedded in `src/WinPro
 
 ## Installation flow
 
-1. The Builder embeds the picker and its catalog in the generated answer file.
-2. During `specialize`, Windows extracts `Provisioner.ps1` to `%WINDIR%\Setup\Scripts\WinProvision` and creates a public desktop shortcut.
+1. The Builder embeds the picker, catalog, shared translations, localization helper and selected interface language in the generated answer file.
+2. During `specialize`, Windows extracts `Provisioner.ps1`, `Localization.ps1` and `Translations.json` to `%WINDIR%\Setup\Scripts\WinProvision` and creates a public desktop shortcut.
 3. A `RunOnce` entry prepared in the default profile opens the picker once for each new account. Windows may defer `RunOnce`; the shortcut remains available.
 4. Clicking **Install** starts a separate process, so the interface remains responsive. Installers that require elevation may show UAC.
 

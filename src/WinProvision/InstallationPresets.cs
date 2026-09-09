@@ -10,15 +10,17 @@ public static class InstallationPresets
  public static readonly IReadOnlyList<string> RecommendedOptions = Array.AsReadOnly(new[]
  {
   "extensions", "this-pc", "no-ad-id", "no-tailored", "no-edge-boost", "no-edge-background",
-  "hide-online", "hide-wifi", "privacy-oobe"
+  "hide-online", "hide-wifi", "privacy-oobe",
+  "remove-solitaire", "remove-news", "remove-weather", "remove-gethelp", "remove-feedback", "remove-todos"
  });
 
  public static BuildProfile Create(string kind, BuildProfile source)
  {
-  if (kind is not (Default or Recommended)) throw new ArgumentException("Choose a built-in installation profile.");
+  if (kind is not (Default or Recommended)) throw new ArgumentException(L.T("Unknown installation profile."));
   return new BuildProfile
   {
    InstallationProfile = kind,
+   InterfaceLanguage = source.InterfaceLanguage,
    Windows = source.Windows,
    Edition = source.Edition,
    AppSelectionMode = source.AppSelectionMode,

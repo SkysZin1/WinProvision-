@@ -62,6 +62,16 @@ public static class Catalog
    ("gethelp","Get Help","Microsoft.GetHelp",Both), ("feedback","Feedback Hub","Microsoft.WindowsFeedbackHub",Both),
    ("phone","Phone Link","Microsoft.YourPhone",Both), ("todos","Microsoft To Do","Microsoft.Todos",Both),
    ("maps","Maps","Microsoft.WindowsMaps",Both), ("outlook","Outlook for Windows","Microsoft.OutlookForWindows",Both),
+   ("camera","Camera","Microsoft.WindowsCamera",Both),
+   ("recorder","Sound Recorder","Microsoft.WindowsSoundRecorder",Both),
+   ("music","Media Player / Groove Music","Microsoft.ZuneMusic",Both),
+   ("movies","Movies & TV","Microsoft.ZuneVideo",Both),
+   ("photos","Photos","Microsoft.Windows.Photos",Both),
+   ("alarms","Clock / Alarms","Microsoft.WindowsAlarms",Both),
+   ("calculator","Calculator","Microsoft.WindowsCalculator",Both),
+   ("sticky-notes","Sticky Notes","Microsoft.MicrosoftStickyNotes",Both),
+   ("tips","Tips / Get Started","Microsoft.Getstarted",Both),
+   ("onenote","OneNote (Store app)","Microsoft.Office.OneNote",Both),
    ("teams","Teams (MSIX)","MSTeams",Both), ("copilot","Copilot (app)","Microsoft.Copilot",Eleven)
   }) All.Add(new("remove-" + id, "Remove built-in apps", "Remove " + title, "Remove the provisioned " + title + " package if present. Does not install replacements; availability varies by image.", compat, "System", $"Get-AppxProvisionedPackage -Online | Where-Object DisplayName -eq '{package}' | Remove-AppxProvisionedPackage -Online | Out-Null"));
  }

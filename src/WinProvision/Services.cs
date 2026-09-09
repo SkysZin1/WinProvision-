@@ -39,14 +39,14 @@ public static class Services
  {
   var payload = Path.Combine(dir, "autounattend.xml");
   await File.WriteAllTextAsync(payload, AnswerFile.Generate(profile, password), new UTF8Encoding(true));
-  var job = new { IsoPath=Path.GetFullPath(iso), DiskNumber=disk.Number, disk.UniqueId, disk.Size, profile.Windows, profile.Edition, profile.Language, AnswerFile=payload, AppDirectory=AppContext.BaseDirectory };
+  var job = new { IsoPath=Path.GetFullPath(iso), DiskNumber=disk.Number, disk.UniqueId, disk.Size, profile.Windows, profile.Edition, profile.Language, profile.InterfaceLanguage, AnswerFile=payload, AppDirectory=AppContext.BaseDirectory };
   var jobFile=Path.Combine(dir,"job.json");
   await File.WriteAllTextAsync(jobFile,JsonSerializer.Serialize(job,BuildProfile.Json));
   try
   {
    var script=Path.Combine(AppContext.BaseDirectory,"Scripts","Build-Usb.ps1");
    var start=new ProcessStartInfo(PowerShell) { UseShellExecute=true, Verb="runas", WindowStyle=ProcessWindowStyle.Hidden, Arguments=$"-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{script}\" -JobPath \"{jobFile}\"" };
-   using var process=Process.Start(start) ?? throw new IOException("Could not start USB writer.");
+   using var process=Process.Start(start) ?? throw new IOException(L.T("Could not start USB writer."));
    string last="";
    while (!process.HasExited)
    {
@@ -55,10 +55,10 @@ public static class Services
     await Task.Delay(600);
    }
    var result=Path.Combine(dir,"result.json");
-   if(!File.Exists(result)) throw new IOException("The writer stopped without a result. The USB may be incomplete. See the build log.");
+   if(!File.Exists(result)) throw new IOException(L.T("The writer stopped without a result. The USB may be incomplete. See the build log."));
    using var doc=JsonDocument.Parse(await File.ReadAllTextAsync(result));
    if(!doc.RootElement.GetProperty("Success").GetBoolean()) throw new IOException(doc.RootElement.GetProperty("Message").GetString());
-   progress.Report("USB ready. Safely eject it before unplugging.");
+   progress.Report(L.T("USB ready. Safely eject it before unplugging."));
   }
   finally { if(File.Exists(payload)) File.Delete(payload); }
  }

@@ -1,5 +1,7 @@
-﻿$ErrorActionPreference='Stop'
-$root=Split-Path $PSScriptRoot
+﻿param([ValidateSet('pt-BR','en-US')][string]$UiLanguage='en-US')
+$ErrorActionPreference='Stop'
+$root=Join-Path (Split-Path $PSScriptRoot) 'src\WinProvision'
+. (Join-Path $root 'Scripts\Localization.ps1')
 $global:wpAppCase=''
 $global:wpAppCalls=0
 # Mock every operation which can register or install a package.
@@ -29,14 +31,14 @@ foreach($scenario in @('success','failure','cancel','invalid','missing-winget','
  New-Item -ItemType Directory -Path $global:wpAppJob -Force | Out-Null
  $ids=if($scenario -eq 'invalid'){@('not-allowed; command')}elseif($scenario -eq 'store'){@('9NT1R1C2HH7J')}elseif($scenario -like 'nvidia*'){@('NVIDIA.App.Official')}else{@('7zip.7zip','Mozilla.Firefox')}
  @{Ids=$ids} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $global:wpAppJob 'request.json') -Encoding UTF8
- & (Join-Path $root 'Scripts\Provisioner.ps1') -Worker -JobPath $global:wpAppJob
+ & (Join-Path $root 'Scripts\Provisioner.ps1') -Worker -JobPath $global:wpAppJob -UiLanguage $UiLanguage
  $result=Get-Content -LiteralPath (Join-Path $global:wpAppJob 'status.json') -Raw | ConvertFrom-Json
  if(-not $result.Done){throw 'Worker did not finish.'}
  switch($scenario){
   'success' {if($global:wpAppCalls -ne 2 -or @($result.Items | Where-Object Status -ne 'Completed').Count){throw 'Success handling failed.'}}
   'failure' {if($global:wpAppCalls -ne 2 -or $result.Items[0].Status -ne 'Failed' -or $result.Items[1].Status -ne 'Completed'){throw 'Failure continuation failed.'}}
   'cancel' {if($global:wpAppCalls -ne 1 -or $result.Items[1].Status -ne 'Deferred'){throw 'Queue cancellation failed.'}}
-  'invalid' {if($global:wpAppCalls -ne 0 -or $result.Message -notlike '*Invalid app selection*'){throw 'Invalid selection was not rejected.'}}
+  'invalid' {if($global:wpAppCalls -ne 0 -or $result.Message -ne (T 'Invalid app selection.')){throw 'Invalid selection was not rejected.'}}
   'missing-winget' {if($global:wpAppCalls -ne 0 -or $result.Message -notlike '*Microsoft Store*'){throw 'Missing WinGet guidance failed.'}}
   'already-installed' {if($global:wpAppCalls -ne 2 -or @($result.Items | Where-Object Status -ne 'Completed').Count){throw 'Already installed handling failed.'}}
   'store' {if($global:wpAppCalls -ne 1 -or $result.Items[0].Status -ne 'Completed'){throw 'Store handling failed.'}}
