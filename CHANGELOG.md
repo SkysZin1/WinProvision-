@@ -4,7 +4,7 @@
 
 - Fixed false internet failures by checking the WinGet download service when the connectivity endpoint fails. Both checks retain timeouts and write diagnostic logs.
 - Fixed false App Installer failures on Windows PowerShell 5.1 by retaining the process handle before reading the WinGet exit code.
-- Cursor installation and retry flow validated on an existing Windows installation.
+- Application installation and retry flow validated on an existing Windows installation.
 
 ## 0.7.0
 

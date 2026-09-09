@@ -26,4 +26,4 @@ Projeto e atualizações: https://github.com/SkysZin1/WinProvision-
 
 A versão 0.7.1 adiciona Opera GX, Zoom, qBittorrent, Blender, WizTree e Cursor, além de resumo da instalação, opção de tentar novamente apenas as falhas e verificação prévia da internet e do Instalador de Aplicativos.
 
-Correções 0.7.1: corrigidos os falsos erros de internet e do Instalador de Aplicativos. A instalação do Cursor após uma nova tentativa foi validada em uma instalação existente do Windows.
+Correções 0.7.1: corrigidos os falsos erros de internet e do Instalador de Aplicativos. O fluxo de instalação e nova tentativa de aplicativos foi validado em uma instalação existente do Windows.
