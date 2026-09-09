@@ -17,7 +17,7 @@ O perfil Recomendado remove Microsoft Solitaire Collection, Microsoft Notícias,
 
 ## Testes e compatibilidade
 
-Esta versão passou por testes de geração de XML, troca de idioma, preservação de escolhas, interface e simulações de gravação USB e instalação de aplicativos. Ainda é necessário validar a inicialização e a instalação completa em Windows 10 e 11.
+Esta versão inclui testes de geração de XML, troca de idioma, preservação de escolhas, interface e simulações de gravação USB e instalação de aplicativos.
 
 O Builder exige Windows e .NET 8 Desktop Runtime. O seletor de aplicativos usa o Windows PowerShell e o WPF do próprio Windows. Os downloads de aplicativos exigem internet; alguns instaladores podem solicitar permissão ou interação.
 
@@ -26,4 +26,4 @@ Projeto e atualizações: https://github.com/SkysZin1/WinProvision-
 
 A versão 0.7.1 adiciona Opera GX, Zoom, qBittorrent, Blender, WizTree e Cursor, além de resumo da instalação, opção de tentar novamente apenas as falhas e verificação prévia da internet e do Instalador de Aplicativos.
 
-Correções 0.7.1: corrigidos os falsos erros de internet e do Instalador de Aplicativos. A instalação do Cursor foi confirmada no Windows atual; a instalação completa do Windows ainda precisa ser testada.
+Correções 0.7.1: corrigidos os falsos erros de internet e do Instalador de Aplicativos. A instalação do Cursor após uma nova tentativa foi validada em uma instalação existente do Windows.

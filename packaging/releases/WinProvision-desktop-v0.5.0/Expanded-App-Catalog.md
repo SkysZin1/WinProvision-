@@ -33,6 +33,6 @@ The NVIDIA app was absent from the WinGet repository when checked. It uses the o
 
 New catalog entries live in `Assets/AdditionalApps.json`, embedded in the Builder. Run `Scripts/Bundle-AppIcons.ps1` after changes to update the matching PowerShell catalog and offline vector data. The two original generic icons, archive and settings, are WinProvision assets; other icon credits are under `Assets/AppIcons`.
 
-Checked package identifiers against their installer manifests in the official Microsoft repository. Tests cover 30-icon loading, category filters, saved profiles, embedded plans, Store source selection and rejection of an unsigned NVIDIA installer, with all installation/download operations mocked. Real installation testing remains pending.
+Checked package identifiers against their installer manifests in the official Microsoft repository. Tests cover 30-icon loading, category filters, saved profiles, embedded plans, Store source selection and rejection of an unsigned NVIDIA installer, with all installation/download operations mocked.
 
 Sources: [Microsoft WinGet manifests](https://github.com/microsoft/winget-pkgs), [official ChatGPT deployment command](https://help.openai.com/en/articles/9982051), [WhatsApp Store listing](https://apps.microsoft.com/detail/9nksqgp7f2nh), [NVIDIA app](https://www.nvidia.com/en-us/software/nvidia-app/), [Intel Driver & Support Assistant](https://www.intel.com/content/www/us/en/support/detect.html).

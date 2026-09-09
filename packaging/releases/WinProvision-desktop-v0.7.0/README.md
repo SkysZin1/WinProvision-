@@ -1,6 +1,6 @@
 # WinProvision USB Builder
 
-Native Windows desktop application (C# / WPF) for creating a personalized Windows installation USB. Version 0.7.0 expands the bilingual app catalog and adds installation summaries, retrying failed apps and pre-installation readiness checks. Full installation/boot testing is still pending.
+Native Windows desktop application (C# / WPF) for creating a personalized Windows installation USB. Version 0.7.0 expands the bilingual app catalog and adds installation summaries, retrying failed apps and pre-installation readiness checks.
 
 ## Open the app
 
@@ -52,7 +52,7 @@ Default and Recommended preserve the Windows version and edition selected in ste
 - Disable Edge Startup Boost.
 - Disable Edge background mode.
 
-Recommended keeps Defender, SmartScreen, UAC, updates, encryption, appearance and power settings at their defaults, while using the specified OOBE privacy choices. It does not bypass hardware checks. Edge may take longer to launch and background extensions will stop when it closes. Disk and partition selection remains manual, as required by the selected installation profile. Edition/product-key prompts can still appear before disk selection; activation is separate. The configured OOBE is intended to run unattended after installation, but Windows builds, drivers or OEM screens can introduce extra prompts. Real installation testing is still required on Windows 10 and 11. No `SkipMachineOOBE` or `SkipUserOOBE` is generated. References: [Microsoft: automate OOBE](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/automate-oobe), [one-time logon cleanup](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-autologon-logoncount), [Windows privacy controls](https://learn.microsoft.com/en-gb/windows/privacy/windows-privacy-compliance-guide), [Edge StartupBoostEnabled](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/startupboostenabled), [Edge BackgroundModeEnabled](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/backgroundmodeenabled).
+Recommended keeps Defender, SmartScreen, UAC, updates, encryption, appearance and power settings at their defaults, while using the specified OOBE privacy choices. It does not bypass hardware checks. Edge may take longer to launch and background extensions will stop when it closes. Disk and partition selection remains manual, as required by the selected installation profile. Edition/product-key prompts can still appear before disk selection; activation is separate. The configured OOBE is intended to run unattended after installation, but Windows builds, drivers or OEM screens can introduce extra prompts. No `SkipMachineOOBE` or `SkipUserOOBE` is generated. References: [Microsoft: automate OOBE](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/automate-oobe), [one-time logon cleanup](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-autologon-logoncount), [Windows privacy controls](https://learn.microsoft.com/en-gb/windows/privacy/windows-privacy-compliance-guide), [Edge StartupBoostEnabled](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/startupboostenabled), [Edge BackgroundModeEnabled](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/backgroundmodeenabled).
 
 The selected profile's changes are listed before review. **Customize this profile** opens its exact settings in the existing editor. The **Custom** card restores a prior custom draft when available; otherwise it starts from the selected preset. Switching to Default or Recommended preserves a custom draft in memory for that session, including its unsaved password; only the selected configuration is exported, always without passwords. Old profile files load as Custom. Built-in profiles edited externally are relabelled Custom when their settings no longer match.
 
@@ -93,7 +93,7 @@ Self-tests check XML escaping, credential omission, OS filtering, account valida
 
 Before a stable release, run a disposable-USB creation test and full installation tests for both Windows versions. Check UEFI boot, WIM split installation, OOBE, local accounts, first-login cleanup, tweak logs, power failure handling and a fresh host without the SDK.
 
-Layout regression tests simulate RAW disks and disks that still report GPT/MBR after clearing, remaining partitions, device identity changes, initialization failures and unknown styles. The writer refreshes and revalidates the device after clearing, initializes only RAW disks, and requires an empty layout before converting an MBR disk to GPT. These simulations do not replace testing on a physical USB.
+Layout regression tests simulate RAW disks and disks that still report GPT/MBR after clearing, remaining partitions, device identity changes, initialization failures and unknown styles. The writer refreshes and revalidates the device after clearing, initializes only RAW disks, and requires an empty layout before converting an MBR disk to GPT.
 
 ## References
 

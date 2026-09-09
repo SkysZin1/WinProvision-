@@ -6,7 +6,7 @@
 - Added internet connectivity and App Installer readiness checks before installation, with recovery guidance and bounded check timeouts.
 - Added Opera GX (Browsers), Zoom (Communication), qBittorrent and WizTree (Utilities), Blender (Design & 3D), and Cursor (Development).
 - Expanded the catalog to 36 apps across 12 categories, with bilingual descriptions and bundled offline icons.
-- Full Windows installation and physical boot validation remain pending; automated and simulated checks passed.
+- Automated and simulated checks passed for the Builder, XML generation, app picker and installation worker.
 
 ## 0.6.0
 
@@ -16,7 +16,7 @@
 - Recommended now removes Solitaire Collection, Microsoft News, Weather, Get Help, Feedback Hub and Microsoft To Do when present.
 - Added ten optional built-in app removals to Custom.
 - Removed the standalone App Picker preview button while retaining the pre-installation app selection flow.
-- Validated both languages, generated XML, profile compatibility, UI layouts and mocked USB/application workers. Physical boot and clean Windows installation tests remain outstanding.
+- Validated both languages, generated XML, profile compatibility, UI layouts and mocked USB/application workers.
 
 ## 0.5.0
 

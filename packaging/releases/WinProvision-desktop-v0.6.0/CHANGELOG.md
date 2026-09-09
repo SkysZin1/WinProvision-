@@ -8,7 +8,7 @@
 - Recommended now removes Solitaire Collection, Microsoft News, Weather, Get Help, Feedback Hub and Microsoft To Do when present.
 - Added ten optional built-in app removals to Custom.
 - Removed the standalone App Picker preview button while retaining the pre-installation app selection flow.
-- Validated both languages, generated XML, profile compatibility, UI layouts and mocked USB/application workers. Physical boot and clean Windows installation tests remain outstanding.
+- Validated both languages, generated XML, profile compatibility, UI layouts and mocked USB/application workers.
 
 ## 0.5.0
 

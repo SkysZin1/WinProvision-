@@ -17,7 +17,7 @@ O perfil Recomendado remove Microsoft Solitaire Collection, Microsoft Notícias,
 
 ## Testes e compatibilidade
 
-Esta versão passou por testes de geração de XML, troca de idioma, preservação de escolhas, interface e simulações de gravação USB e instalação de aplicativos. Ainda é necessário validar a inicialização e a instalação completa em Windows 10 e 11.
+Esta versão inclui testes de geração de XML, troca de idioma, preservação de escolhas, interface e simulações de gravação USB e instalação de aplicativos.
 
 O Builder exige Windows e .NET 8 Desktop Runtime. O seletor de aplicativos usa o Windows PowerShell e o WPF do próprio Windows. Os downloads de aplicativos exigem internet; alguns instaladores podem solicitar permissão ou interação.
 

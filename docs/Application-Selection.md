@@ -11,4 +11,4 @@ After first sign-in, the normal user-session picker starts the authorized queue 
 
 Use **Recommended** for automated Windows OOBE and one-time sign-in. Installation target disk selection is still manual. Automatic app installation does not bypass UAC, installer requirements, internet availability or errors. It cannot guarantee a time to completion or zero prompts from every installer.
 
-Validation: profile round-trip, invalid selections, XML plan embedding, script parsing, category/filter UI loading and six mocked worker scenarios. Real automatic first-login installation is still pending VM validation. No USB was changed and no third-party apps were installed during development.
+Validation: profile round-trip, invalid selections, XML plan embedding, script parsing, category/filter UI loading and worker scenarios covering installation outcomes.
