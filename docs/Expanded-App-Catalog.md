@@ -17,7 +17,7 @@ Existing apps remain available: Chrome, Firefox, Brave, 7-Zip, VLC, Spotify, Dis
 
 ## Installation sources
 
-Regular packages use the Microsoft community WinGet source. WhatsApp uses Store ID `9NKSQGP7F2NH`; ChatGPT uses the official Store ID `9NT1R1C2HH7J`. WinGet selects the source from the bundled catalog, never from a user-supplied command. No unofficial ChatGPT wrapper is included.
+Regular packages use the Microsoft community WinGet source. WhatsApp uses Store ID `9NKSQGP7F2NH`; ChatGPT uses the official Store ID `9PLM9XGG6VKS`. WinGet selects the source from the bundled catalog, never from a user-supplied command. No unofficial ChatGPT wrapper is included.
 
 The NVIDIA app was absent from the WinGet repository when checked. It uses the official NVIDIA download URL for version 11.0.9.251 instead. Before execution, Windows must report a valid Authenticode signature whose subject is NVIDIA Corporation. Invalid signatures stop installation. Its vendor installer is interactive and may show UAC or other prompts; it is not guaranteed unattended. This URL is pinned and should be reviewed when updating the catalog.
 

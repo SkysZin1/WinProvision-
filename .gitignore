@@ -1,6 +1,7 @@
 bin/
 obj/
 artifacts/
+packaging/releases/
 *.user
 *.suo
 profiles-private/

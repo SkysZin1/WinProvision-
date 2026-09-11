@@ -4,6 +4,7 @@ public static class InstallationPresets
 {
  public const string Default = "Default";
  public const string Recommended = "Recommended";
+ public const string RecommendedPassword = "123";
  public const string Custom = "Custom";
 
  // Small, reviewable baseline. Personal appearance and hardware choices stay custom.

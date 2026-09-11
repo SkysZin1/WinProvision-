@@ -1,5 +1,7 @@
 # WinProvision Apps
 
+When Activate Windows is selected, a small confirmation window appears alongside App Picker. It explains that internet access is required. Confirm opens the interactive activation terminal; Not now or closing the window does not run the script. A separate WinProvision Activation desktop shortcut reopens this confirmation window. A per-user marker prevents automatic repeated prompts when reopening App Picker. Launch failures are recorded in `%LOCALAPPDATA%\WinProvision\Activation-launch.log` and do not block App Picker.
+
 The picker opens at the first sign-in for each account created from the Windows default profile. Users choose applications and start installation. No application is selected by default.
 
 ## Interface
@@ -18,8 +20,8 @@ The catalog is a closed list of exact WinGet identifiers embedded in `src/WinPro
 ## Installation flow
 
 1. The Builder embeds the picker, catalog, shared translations, localization helper and selected interface language in the generated answer file.
-2. During `specialize`, Windows extracts `Provisioner.ps1`, `Localization.ps1` and `Translations.json` to `%WINDIR%\Setup\Scripts\WinProvision` and creates a public desktop shortcut.
-3. A `RunOnce` entry prepared in the default profile opens the picker once for each new account. Windows may defer `RunOnce`; the shortcut remains available.
+2. During `specialize`, Windows extracts the payloads to `%WINDIR%\Setup\Scripts\WinProvision`, registers first-login startup and applies system settings and user preferences to the default profile. Public desktop shortcut creation is optional and cannot stop configuration. Bootstrap errors are recorded in `%WINDIR%\Temp\WinProvision-Bootstrap.log`.
+3. A `RunOnce` entry prepared in the default profile starts `LaunchApps.ps1` for each new account. The launcher opens the optional activation confirmation window and App Picker independently. Windows may defer `RunOnce`; when created, the desktop shortcut also opens the launcher.
 4. Clicking **Install** starts a separate process, so the interface remains responsive. Installers that require elevation may show UAC.
 
 ## Network and failures

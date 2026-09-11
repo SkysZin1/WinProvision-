@@ -5,6 +5,7 @@ using System.Xml.Linq;
 namespace WinProvision;
 public static class SelfTests
 {
+ static string ReadPayload(XDocument doc, string name) => System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(doc.Descendants().Single(e=>e.Name.LocalName==name).Value));
  internal static void RenderInterface(System.Windows.FrameworkElement content,string name,int width,int height)
  {
   var background=new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(243,246,245));
@@ -35,7 +36,7 @@ public static class SelfTests
    Check(saved.InterfaceLanguage==language && saved.Options.SetEquals(bilingual.Options),"Language/profile round-trip failed.");
    Check(InstallationPresets.Create(InstallationPresets.Recommended,bilingual).InterfaceLanguage==language,"Preset lost interface language.");
    var xml=XDocument.Parse(AnswerFile.Generate(bilingual,""));
-   Check(xml.Descendants().Single(e=>e.Name.LocalName=="Provisioner").Value.Contains("\"InterfaceLanguage\":\""+language+"\""),"Picker language missing from XML.");
+   Check(ReadPayload(xml, "Provisioner").Contains("\"InterfaceLanguage\":\""+language+"\""),"Picker language missing from XML.");
    Check(xml.Descendants().Any(e=>e.Name.LocalName=="Localization") && xml.Descendants().Any(e=>e.Name.LocalName=="LocalizationScript"),"Offline localization resources missing.");
    Check(Catalog.All.Single(o=>o.Id=="remove-weather").DisplayTitle==(language=="pt-BR"?"Remover Clima":"Remove Weather"),"Removal translation failed.");
    if(language=="pt-BR"){
@@ -56,7 +57,7 @@ public static class SelfTests
   var appsRoundTrip=JsonSerializer.Deserialize<BuildProfile>(JsonSerializer.Serialize(appsProfile))!;
   Check(appsRoundTrip.AppSelectionMode=="BeforeBoot" && appsRoundTrip.SelectedApps.SetEquals(appsProfile.SelectedApps),"Application selection must round-trip.");
   var plannedXml=XDocument.Parse(AnswerFile.Generate(appsProfile,""));
-  var plannedScript=plannedXml.Descendants().Single(e=>e.Name.LocalName=="Provisioner").Value;
+  var plannedScript=ReadPayload(plannedXml, "Provisioner");
   Check(plannedScript.Contains("\"Mode\":\"BeforeBoot\"") && plannedScript.Contains("\"Ids\":[\"7zip.7zip\",\"Mozilla.Firefox\"]"),"Automatic app plan missing from XML.");
   Check(!plannedScript.Contains("$initialPlan=@{Mode='AfterBoot';Ids=@()}"),"App plan placeholder was not replaced.");
   Check(InstallationPresets.Create(InstallationPresets.Recommended,appsProfile).SelectedApps.SetEquals(appsProfile.SelectedApps),"Windows presets must preserve app selections.");
@@ -70,14 +71,23 @@ public static class SelfTests
   var defaultDoc=XDocument.Parse(defaultXml);
   Check(!defaultDoc.Descendants().Any(e=>e.Name.LocalName=="Script"),"Default XML should not include tweak scripts.");
   Check(defaultDoc.Descendants().Count(e=>e.Name.LocalName=="Provisioner")==1,"App picker must be embedded even without account customization.");
-  Check(defaultDoc.Descendants().Single(e=>e.Name.LocalName=="Provisioner").Value.Contains("if($Worker)"),"Embedded app picker must contain its worker.");
+  Check(ReadPayload(defaultDoc, "Provisioner").Contains("if($Worker)"),"Embedded app picker must contain its worker.");
   var activationProfile = new BuildProfile { Username = "ActivateTest", AutoLogon = true, Language = "pt-BR", Keyboard = "Brazil ABNT2", Options = ["activate-windows"] };
   var activationXml = XDocument.Parse(AnswerFile.Generate(activationProfile, "Pass123!"));
   Check(activationXml.Descendants().Any(e=>e.Name.LocalName=="ActivateWindows"),"Activation script must be embedded in the generated XML.");
-  Check(activationXml.Descendants().Any(e=>e.Name.LocalName=="CommandLine" && e.Value.Contains("activateWindows.cmd")),"Activation option must add a first-logon command.");
-  foreach(var path in defaultDoc.Descendants().Where(e=>e.Name.LocalName=="Path" && e.Value.Contains("-EncodedCommand")))
+  Check(ReadPayload(activationXml,"ActivateWindows").EndsWith("\r\n\r\n"),"CMD payload must end with an empty CRLF line.");
+  Check(ReadPayload(activationXml,"Bootstrap").Contains("wscript.exe") && ReadPayload(activationXml,"Bootstrap").Contains("0,false"),"Picker must start through a hidden GUI launcher.");
+  Check(InstallationPresets.RecommendedPassword=="123","Recommended default password must match the displayed value.");
+  Check(!activationXml.Descendants().Any(e=>e.Name.LocalName=="CommandLine" && e.Value.Contains("activateWindows.cmd")),"Activation must not run twice through FirstLogonCommands.");
+  Check(ReadPayload(activationXml,"Launcher").Contains("ActivateWindows.js") && !ReadPayload(activationXml,"Launcher").Contains("/d /k") && !ReadPayload(activationXml,"Launcher").Contains("-Wait"),"Startup must open only the confirmation window without blocking App Picker.");
+  Check(ReadPayload(activationXml,"ActivationPrompt").Contains("$confirmButton.Add_Click") && ReadPayload(activationXml,"ActivationPrompt").Contains("/d /k"),"Activation must remain interactive and require confirmation.");
+  Check(!defaultDoc.Descendants().Any(e=>e.Name.LocalName=="ActivationPrompt"),"Activation prompt must remain opt-in.");
+  Check(!ReadPayload(defaultDoc,"Launcher").Contains("activateWindows.cmd"),"Activation must remain opt-in.");
+  foreach(var path in defaultDoc.Descendants().Where(e=>e.Name.LocalName=="Path"))
   {
-   var extraction=System.Text.Encoding.Unicode.GetString(Convert.FromBase64String(path.Value.Split(' ').Last()));
+   Check(path.Value.Length<=259,"Setup command must not exceed the Windows 259-character limit.");
+   Check(path.Value.Contains("Extensions.Bootstrap"),"Specialize must load the embedded bootstrap.");
+   var extraction=ReadPayload(defaultDoc,"Bootstrap");
    Check(extraction.Contains("WinProvisionAppsDefault") && extraction.Contains("RunOnce") && extraction.Contains("finally"),"App picker must launch once in the user session and unload its hive.");
    Check(!extraction.Contains("winget install") && !extraction.Contains("-Worker"),"Specialize must not start app installations.");
    File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"test-app-extraction.ps1"),extraction);
@@ -88,12 +98,23 @@ public static class SelfTests
    var profile=new BuildProfile {Windows=os,Username="Test & User",ComputerName="BUILD-PC",AutoLogon=true,Language="pt-BR",Keyboard="Brazil ABNT2",Edition="Pro",Options=Catalog.All.Where(o=>o.Supports(os)).Select(o=>o.Id).ToHashSet()};
    const string secret="Test<&'\"42";
    var xml=AnswerFile.Generate(profile,secret);var doc=XDocument.Parse(xml);
+   Check(doc.Descendants().Where(e=>e.Name.LocalName=="Path").All(e=>e.Value.Length<=259),"All Setup paths must satisfy the Windows length limit with every supported option.");
+   Check(doc.Descendants().Where(e=>e.Name.LocalName=="CommandLine").All(e=>e.Value.Length<=1024),"First-logon commands must satisfy the Windows length limit.");
    Check(doc.Descendants().Any(e=>e.Name.LocalName=="Value" && e.Value==secret),"Passwords must round-trip through XML escaping.");
    Check(!AnswerFile.Generate(profile,secret,true).Contains("Test&lt;"),"Preview must omit password.");
    Check(!JsonSerializer.Serialize(profile).Contains(secret),"Saved profiles must not include password.");
    Check(!doc.Descendants().Any(e=>e.Name.LocalName is "DiskConfiguration" or "InstallTo"),"No target-disk automation may be generated.");
-   var script=doc.Descendants().Single(e=>e.Name.LocalName=="Script").Value;
-   Check(script.Contains("WinProvisionDefault") && script.Contains("finally"),"Default-user hive must be unloaded.");
+   var script=ReadPayload(doc, "Script");
+   if(profile.Options.Contains("classic-menu")) {
+    Check(!script.Contains("86ca1aa0"),"Classic menu must not target Default NTUSER.DAT.");
+    Check(ReadPayload(doc,"Cleanup").Contains("ConfigureMenu.ps1"),"Classic menu must run in the first-login account.");
+    Check(ReadPayload(doc,"ClassicMenu").Contains("CurrentUser.CreateSubKey") && ReadPayload(doc,"ClassicMenu").Contains("GetValueNames()"),"Classic menu must verify the actual user value.");
+   }
+   Check(!script.Contains("Set-Reg 'HKCU"),"Setup preferences must target the default profile, not the setup account.");
+   Check(script.Contains("if(-not (Test-Path -LiteralPath $p))"),"Existing registry keys must be preserved.");
+   Check(script.Contains("WinProvisionDefault") && script.Contains("finally"),"Default user preferences must be prepared during setup and the hive unloaded.");
+   var launcher=ReadPayload(doc,"Launcher");
+   Check(!launcher.Contains("ConfigureUser.ps1") && launcher.Contains("Provisioner.ps1"),"Picker launch must not depend on first-login configuration.");
    Check(!script.Contains("winget") && !script.Contains("DownloadFile") && !script.Contains("Start-Process"),"Configuration scripts must not install third-party apps.");
    File.WriteAllText(Path.Combine(AppContext.BaseDirectory,$"test-generated-{os}.ps1"),script);
    File.WriteAllText(Path.Combine(AppContext.BaseDirectory,$"test-generated-{os}.xml"),xml);
@@ -120,7 +141,7 @@ public static class SelfTests
    var recommendedXml=XDocument.Parse(AnswerFile.Generate(recommended,"Sample-password-42"));
    var removalIds = new[] { "remove-solitaire", "remove-news", "remove-weather", "remove-gethelp", "remove-feedback", "remove-todos" };
    Check(recommended.Options.Where(id => id.StartsWith("remove-")).ToHashSet().SetEquals(removalIds), "Recommended must remove exactly the six selected apps.");
-   var removalScript = recommendedXml.Descendants().Single(e => e.Name.LocalName == "Script").Value;
+   var removalScript = ReadPayload(recommendedXml, "Script");
    foreach (var id in removalIds)
     Check(removalScript.Contains(Catalog.All.Single(o => o.Id == id).Code), "Recommended XML must include removal code for " + id);
    Check(!removalScript.Contains("Microsoft.WindowsCalculator"), "Optional removals must not leak into Recommended.");
@@ -133,7 +154,8 @@ public static class SelfTests
      Check(localePasses.Single(e=>(string?)e.Attribute("pass")==pass).Descendants().Any(e=>e.Name.LocalName==field),"Missing locale "+field+" in "+pass);
    Check(!recommendedXml.Descendants().Any(e=>e.Name.LocalName is "SkipMachineOOBE" or "SkipUserOOBE" or "DiskConfiguration" or "InstallTo"),"Do not use deprecated OOBE skips or erase target disks.");
    var firstLogon=recommendedXml.Descendants().Single(e=>e.Name.LocalName=="CommandLine").Value;
-   var cleanup=System.Text.Encoding.Unicode.GetString(Convert.FromBase64String(firstLogon.Split(' ').Last()));
+   Check(firstLogon.Contains("Extensions.Cleanup") && firstLogon.Length<=1024,"First logon must load embedded cleanup through a short command.");
+   var cleanup=ReadPayload(recommendedXml,"Cleanup");
    Check(cleanup.Contains("AutoLogonCount -Value 0") && cleanup.Contains("AutoAdminLogon -Value '0'"),"First logon must disable subsequent automatic logons.");
    Reject(()=>AnswerFile.Generate(recommended,""),"Recommended must require its local password before writing.");
    var incomplete=recommended.Clone();incomplete.Keyboard="Default";

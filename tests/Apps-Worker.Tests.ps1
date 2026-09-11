@@ -39,8 +39,8 @@ function Start-Process {
   return $probe
  }
  if($ArgumentList[0] -ne 'install' -or $ArgumentList[3] -ne '--exact' -or $ArgumentList -notcontains '--silent' -or $ArgumentList -notcontains '--disable-interactivity'){throw 'Unsafe install arguments.'}
- if($ArgumentList[2] -notin @('7zip.7zip','Mozilla.Firefox','9NT1R1C2HH7J')){throw 'Unexpected package.'}
- if($ArgumentList[2] -eq '9NT1R1C2HH7J' -and $ArgumentList[5] -ne 'msstore'){throw 'Wrong ChatGPT source.'}
+ if($ArgumentList[2] -notin @('7zip.7zip','Mozilla.Firefox','9PLM9XGG6VKS')){throw 'Unexpected package.'}
+ if($ArgumentList[2] -eq '9PLM9XGG6VKS' -and $ArgumentList[5] -ne 'msstore'){throw 'Wrong ChatGPT source.'}
  $global:wpAppCalls++
  if($global:wpAppCase -eq 'cancel'){[IO.File]::WriteAllText((Join-Path $global:wpAppJob 'stop'),'stop')}
  [pscustomobject]@{ExitCode=if($global:wpAppCase -eq 'failure' -and $global:wpAppCalls -eq 1){123}elseif($global:wpAppCase -eq 'already-installed'){[int]0x8A150061}else{0}}
@@ -49,7 +49,7 @@ foreach($scenario in @('success','failure','cancel','invalid','missing-winget','
  $global:wpAppCase=$scenario;$global:wpAppCalls=0
  $global:wpAppJob=Join-Path $root ('artifacts\app-worker-tests\'+[guid]::NewGuid().ToString('N'))
  New-Item -ItemType Directory -Path $global:wpAppJob -Force | Out-Null
- $ids=if($scenario -eq 'invalid'){@('not-allowed; command')}elseif($scenario -eq 'store'){@('9NT1R1C2HH7J')}elseif($scenario -like 'nvidia*'){@('NVIDIA.App.Official')}else{@('7zip.7zip','Mozilla.Firefox')}
+ $ids=if($scenario -eq 'invalid'){@('not-allowed; command')}elseif($scenario -eq 'store'){@('9PLM9XGG6VKS')}elseif($scenario -like 'nvidia*'){@('NVIDIA.App.Official')}else{@('7zip.7zip','Mozilla.Firefox')}
  @{Ids=$ids} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $global:wpAppJob 'request.json') -Encoding UTF8
  & (Join-Path $root 'Scripts\Provisioner.ps1') -Worker -JobPath $global:wpAppJob -UiLanguage $UiLanguage
  $result=Get-Content -LiteralPath (Join-Path $global:wpAppJob 'status.json') -Raw | ConvertFrom-Json

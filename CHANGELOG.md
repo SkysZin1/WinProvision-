@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.2
+
+- Added a bilingual activation confirmation window with an internet requirement notice and a dedicated desktop shortcut. The interactive terminal opens only after confirmation.
+- Applied and verified the optional classic context menu in the first-login account instead of the default profile hive.
+- Removed the attached console window when starting App Picker.
+- Preserved CMD line endings and the required final empty line in generated media.
+- Set the Recommended account's initial password to `123`, editable in the Builder with a visible default-password hint.
+- Fixed Windows Setup command-length errors and preserved embedded scripts and accented text with encoded payloads and explicit UTF-8 extraction.
+- Applied general preferences during installation while preserving existing registry keys; isolated optional shortcut failures and added setup diagnostics.
+- Updated the ChatGPT catalog entry to the desktop Store package.
+- Added regression coverage for setup loaders, startup, confirmation actions and localization.
+
 ## 0.7.1
 
 - Fixed false internet failures by checking the WinGet download service when the connectivity endpoint fails. Both checks retain timeouts and write diagnostic logs.

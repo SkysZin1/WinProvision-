@@ -1,12 +1,12 @@
 # WinProvision USB Builder
 
-Native Windows desktop application (C# / WPF) for creating a personalized Windows installation USB. Version 0.7.1 expands the bilingual app catalog and adds installation summaries, retrying failed apps and pre-installation readiness checks.
+Native Windows desktop application (C# / WPF) for creating a personalized Windows installation USB. Version 0.7.2 improves unattended setup, first-login settings and application startup.
 
 ## Open the app
 
-Version **0.7.1** includes 36 apps, installation summaries, retrying only failed apps, and internet/App Installer readiness checks.
+Version **0.7.2** includes 36 apps, installation summaries, retries, readiness checks and an optional activation confirmation window.
 
-Download and extract **WinProvision-desktop-v0.7.1.zip** from [Releases](https://github.com/SkysZin1/WinProvision-/releases/tag/v0.7.1), then open `WinProvision.exe`. The repository copy is under `packaging\releases\WinProvision-desktop-v0.7.1`. After building from source, use `src\WinProvision\bin\Release\net8.0-windows\WinProvision.exe`. Keep the executable, DLLs, runtime configuration, `Assets` and `Scripts` folders together. The Builder requires the **.NET 8 Desktop Runtime**. The installed target Windows uses built-in Windows PowerShell/WPF and does not need .NET 8.
+Download and extract **WinProvision-desktop-v0.7.2.zip** from [Releases](https://github.com/SkysZin1/WinProvision-/releases), then open `WinProvision.exe`. Release packages are generated locally under `packaging\releases` and are not stored in the source repository. After building from source, use `src\WinProvision\bin\Release\net8.0-windows\WinProvision.exe`. Keep the executable, DLLs, runtime configuration, `Assets` and `Scripts` folders together. The Builder requires the **.NET 8 Desktop Runtime**. The installed target Windows uses built-in Windows PowerShell/WPF and does not need .NET 8.
 
 Choose **Português (Brasil)** or **English** using **Idioma / Language** in either app. The Builder remembers the choice and saves it in exported profiles and the installation media. The picker inherits that language on first boot and can remember a different choice on the installed PC. Changing the interface language preserves selections and does not change the Windows installation language, keyboard or time zone. No terminal is needed; administrator permission is requested when starting USB creation.
 
@@ -26,7 +26,7 @@ Choose **Português (Brasil)** or **English** using **Idioma / Language** in eit
 
 1. Download an unmodified Microsoft Windows ISO.
 2. Open WinProvision, choose the ISO, Windows version and USB device.
-3. Choose Default, Recommended or Custom. Recommended asks for the account password and regional details in the Builder, then generates automated OOBE and one-time sign-in. Default leaves optional settings untouched. Custom opens the full catalog.
+3. Choose Default, Recommended or Custom. Recommended suggests account `User` and password `123`, both editable, and asks for regional details before generating automated OOBE and one-time sign-in. Default leaves optional settings untouched. Custom opens the full catalog.
 4. Review the settings and destination. Confirm data deletion and type the displayed phrase.
 5. Start creation and approve the Windows administrator prompt. The writer validates the ISO **before** erasing the USB.
 6. Wait for completion, safely eject the media and boot the target PC in UEFI mode.
@@ -38,7 +38,7 @@ Choose **Português (Brasil)** or **English** using **Idioma / Language** in eit
 
 Default and Recommended preserve the Windows version and edition selected in step 1. Default leaves accounts, region and login to Setup and enables no optional tweaks. Recommended automates the post-installation setup to reach the desktop:
 
-- Creates a local administrator (suggested name `User`, editable) with the password entered in the Builder.
+- Creates a local administrator (suggested name `User`, editable) with initial password `123`, editable in the Builder.
 - Configures language, keyboard and time zone before installation; suggestions are derived from the builder PC and must be confirmed for the target PC/ISO.
 - Supplies locale settings in both Windows PE and OOBE.
 - Hides online-account, wireless, OEM registration and license screens; accepts the Setup EULA and sets `ProtectYourPC` to 3.
@@ -73,7 +73,7 @@ The selected profile's changes are listed before review. **Customize this profil
 
 Local account passwords are never included in JSON profiles or XML previews. Actual media contains the password in plaintext when an account is configured. Keep that media private. Working jobs have ACLs restricted to the current user, administrators and SYSTEM; the local answer-file copy is removed when the worker finishes. Setup cleanup is attempted at the first logon and requires an administrator; standard-user first logon may leave Panther answer files behind. Cleanup does not erase the USB copy. A crash may leave working files; inspect `%LOCALAPPDATA%\WinProvision\Jobs` before sharing a machine or logs. Use a password and an administrator account for one-time automatic logon.
 
-Configuration scripts are embedded in the XML and extracted to `%WINDIR%\Setup\Scripts\WinProvision`. Per-option successes/failures are recorded in `Configure.log`. Per-user settings edit the default user's offline registry during `specialize`; effects are intended for subsequently created profiles. No generated script is executed on the builder PC.
+Configuration scripts are embedded in the XML and extracted to `%WINDIR%\Setup\Scripts\WinProvision`. System settings and general user preferences run during `specialize` and record per-option results in `Configure.log`. General user preferences target the default profile. The optional classic context menu is applied and verified in the actual account at first login, with results in `%LOCALAPPDATA%\WinProvision\ClassicMenu.log`. App Picker starts without an attached console. When activation is selected, a separate confirmation window explains the internet requirement; its terminal opens only after confirmation. A desktop shortcut reopens that window. No generated script is executed on the builder PC.
 
 Writer jobs/logs: `%LOCALAPPDATA%\WinProvision\Jobs\<job-id>`. The app exposes an **Open build log** button after an attempt.
 
@@ -86,6 +86,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\Writer-Guards.Tests.
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\Writer-Layout.Tests.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\Apps-Worker.Tests.ps1 -UiLanguage pt-BR
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\Apps-Worker.Tests.ps1 -UiLanguage en-US
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\AnswerFile-Loader.Tests.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\Apps-Launcher.Tests.ps1
+powershell -NoProfile -STA -ExecutionPolicy Bypass -File .\tests\Activation-Prompt.Tests.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\Bootstrap-Flow.Tests.ps1
 powershell -NoProfile -STA -ExecutionPolicy Bypass -File .\src\WinProvision\Scripts\Provisioner.ps1 -ValidateUi
 ```
 

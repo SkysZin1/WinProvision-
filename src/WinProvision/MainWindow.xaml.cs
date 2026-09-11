@@ -94,7 +94,7 @@ public partial class MainWindow : Window
  {
   if(busy)return;
   if(profile.InstallationProfile==InstallationPresets.Custom) { customDraft=Current().Clone();customPassword=password; }
-  profile=InstallationPresets.Create(kind,Current());if(kind!=InstallationPresets.Recommended)password="";
+  profile=InstallationPresets.Create(kind,Current());password=kind==InstallationPresets.Recommended?InstallationPresets.RecommendedPassword:"";
   EraseConsent.IsChecked=false;ConfirmText.Clear();
   RenderPresetSummary();UpdateCount();
  }
@@ -252,6 +252,7 @@ public partial class MainWindow : Window
   var name=new TextBox {Text=profile.ComputerName,MaxLength=15};name.TextChanged+=(_,_)=>profile.ComputerName=name.Text;AddField(L.T("Computer name (optional)"),name,1,1);
   var user=new TextBox {Text=profile.Username,MaxLength=20};user.TextChanged+=(_,_)=>profile.Username=user.Text;AddField(recommended?L.T("Local account name (required)"):L.T("Local account name (optional)"),user,2,0);
   var pass=new PasswordBox {Password=password,Padding=new Thickness(10,8,10,8)};pass.PasswordChanged+=(_,_)=>password=pass.Password;AddField(L.T("Local account password (never saved in profiles)"),pass,2,1);
+  if(recommended) stack.Children.Add(Text(L.T("Recommended default password: 123. You can change it here."),12,Muted));
   stack.Children.Add(grid);
   var admin=new CheckBox {Content=L.T("Make the local account an administrator"),IsChecked=profile.Administrator,IsEnabled=!recommended,Margin=new Thickness(0,0,0,12)};
   admin.Checked+=(_,_)=>profile.Administrator=true;admin.Unchecked+=(_,_)=>profile.Administrator=false;stack.Children.Add(admin);
