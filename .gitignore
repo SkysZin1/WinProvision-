@@ -1,7 +1,6 @@
 bin/
 obj/
 artifacts/
-tests/
 packaging/releases/replaced-*/
 packaging/releases/WinProvision-desktop-v*/
 *.user
