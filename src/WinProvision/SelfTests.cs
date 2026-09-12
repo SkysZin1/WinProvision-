@@ -28,6 +28,7 @@ public static class SelfTests
   foreach(var language in new[]{"pt-BR","en-US"})
   {
    L.SetLanguage(language);
+   Check(((string)System.Windows.Application.Current.Resources["Ui009"]).StartsWith("v"+typeof(L).Assembly.GetName().Version!.ToString(3)+"\n"),"Displayed version must match the application in both languages.");
    Check(L.T("Recommended")==(language=="pt-BR"?"Recomendado":"Recommended"),"Preset translation failed.");
    Check(L.F($"ERASE DISK {99}")==(language=="pt-BR"?"APAGAR DISCO 99":"ERASE DISK 99"),"Typed confirmation translation failed.");
    Check(L.F($"{2} app(s) selected.")==(language=="pt-BR"?"2 aplicativo(s) selecionado(s).":"2 app(s) selected."),"Formatted translation failed.");

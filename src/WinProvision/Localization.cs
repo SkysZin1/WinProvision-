@@ -42,7 +42,7 @@ public static class L
   if(language is not ("pt-BR" or "en-US"))throw new ArgumentException(T("Invalid interface language."));
   Language=language;
   if(Application.Current is { } app)
-   foreach(var entry in bundle.Resources)app.Resources[entry.Key]=T(entry.Value);
+   foreach(var entry in bundle.Resources)app.Resources[entry.Key]=T(entry.Value).Replace("{version}", typeof(L).Assembly.GetName().Version!.ToString(3));
  }
  public static LocalizedChoice[] Choices(IEnumerable<string> values) => values.Select(value=>new LocalizedChoice(value,T(value))).ToArray();
  public static LocalizedChoice[] TimeZones(bool includeDefault) =>

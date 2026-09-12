@@ -8,6 +8,9 @@ $zip=$output+'.zip'
 if((Test-Path $output) -or (Test-Path $zip)){throw 'Release output already exists. Review it before rebuilding.'}
 & dotnet publish (Join-Path $root 'src\WinProvision\WinProvision.csproj') -c Release --self-contained false -p:DebugType=None -p:DebugSymbols=false -o $output
 if($LASTEXITCODE -ne 0){throw 'Publish failed.'}
+foreach($binary in @('WinProvision.exe','WinProvision.dll')) {
+ if([Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $output $binary)).FileVersion -ne ($version+'.0')){throw 'Published binary version does not match the project.'}
+}
 foreach($name in @('README.md','CHANGELOG.md','LICENSE')){Copy-Item -LiteralPath (Join-Path $root $name) -Destination $output}
 Copy-Item -LiteralPath (Join-Path $root ('docs\'+$version+'-Release.md')) -Destination (Join-Path $output 'Release-Notes.md')
 Copy-Item -LiteralPath (Join-Path $root 'src\WinProvision\Assets\AppIcons\README.md') -Destination (Join-Path $output 'Icon-Credits.md')

@@ -2,6 +2,7 @@
 
 ## 0.7.2
 
+- Read the displayed application version from assembly metadata in both interface languages.
 - Added a bilingual activation confirmation window with an internet requirement notice and a dedicated desktop shortcut. The interactive terminal opens only after confirmation.
 - Applied and verified the optional classic context menu in the first-login account instead of the default profile hive.
 - Removed the attached console window when starting App Picker.
