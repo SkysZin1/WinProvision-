@@ -1,7 +1,9 @@
 bin/
 obj/
 artifacts/
-packaging/releases/
+tests/
+packaging/releases/replaced-*/
+packaging/releases/WinProvision-desktop-v*/
 *.user
 *.suo
 profiles-private/
